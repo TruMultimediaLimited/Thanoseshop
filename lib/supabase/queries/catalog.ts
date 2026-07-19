@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { Category, Game, Product, ProductWithRelations, Region } from "@/lib/types/catalog";
+import type { Category, Faq, Game, Product, ProductWithRelations, Region } from "@/lib/types/catalog";
 
 const PRODUCT_WITH_RELATIONS_SELECT = `
   *,
@@ -100,6 +100,44 @@ export async function getFeaturedProducts(limit = 8) {
     .select(PRODUCT_WITH_RELATIONS_SELECT)
     .eq("is_published", true)
     .eq("is_featured", true)
+    .is("deleted_at", null)
+    .order("sort_order", { ascending: true })
+    .limit(limit);
+
+  if (error) throw error;
+  return (data ?? []) as unknown as ProductWithRelations[];
+}
+
+export async function getFeaturedGiftCards(limit = 8) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_WITH_RELATIONS_SELECT)
+    .eq("is_published", true)
+    .in("product_type", ["giftcard", "subscription"])
+    .is("deleted_at", null)
+    .order("is_featured", { ascending: false })
+    .order("sort_order", { ascending: true })
+    .limit(limit);
+
+  if (error) throw error;
+  return (data ?? []) as unknown as ProductWithRelations[];
+}
+
+export async function getFlashDeals(limit = 8) {
+  const supabase = await createClient();
+  // Postgres can't compare two columns of the same row through the
+  // PostgREST query builder, so "genuinely discounted" isn't filterable
+  // server-side without a raw SQL view. Convention instead: a flash deal is
+  // a featured, variant-priced product — admins set compare_at_price on the
+  // variant (shown as a strikethrough price) and feature the product to
+  // surface it here.
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_WITH_RELATIONS_SELECT)
+    .eq("is_published", true)
+    .eq("is_featured", true)
+    .eq("has_variants", true)
     .is("deleted_at", null)
     .order("sort_order", { ascending: true })
     .limit(limit);
@@ -222,5 +260,5 @@ export async function getFaqs(productId?: string) {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Faq[];
 }
