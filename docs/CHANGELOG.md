@@ -2,6 +2,14 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Module 5 — Bulk product actions
+- ProductsTable (shared by Products and Gift Cards admin pages): row
+  checkboxes + select-all, bulk Publish/Unpublish/Archive, Duplicate for a
+  single selection (copies the product and its variants as an unpublished
+  draft with a "-copy" slug), CSV export of selected or all rows.
+- New actions: duplicateProduct, bulkSetProductsPublished,
+  bulkArchiveProducts.
+
 ## Module 4 — Admin analytics
 - Dashboard: 30-day revenue area chart + orders bar chart (recharts, one
   series per chart, theme tokens), Revenue(30d)/Customers stat cards, and a

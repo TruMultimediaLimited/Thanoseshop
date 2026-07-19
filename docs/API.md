@@ -31,7 +31,8 @@ helpers (`lib/supabase/queries/**`) guarded by RLS.
   (role: order_manager)
 - `admin/announcements.ts`, `admin/static-pages.ts` — CRUD
   (role: product_manager)
-- `admin/products.ts` (+ `syncVariants` soft-delete logic), `admin/games.ts`,
+- `admin/products.ts` (+ `syncVariants` soft-delete logic, duplicateProduct,
+  bulkSetProductsPublished, bulkArchiveProducts), `admin/games.ts`,
   `admin/categories.ts`, `admin/regions.ts`, `admin/coupons.ts`,
   `admin/banners.ts`, `admin/faqs.ts`, `admin/blog.ts`,
   `admin/homepage-sections.ts`, `admin/payment-methods.ts`,

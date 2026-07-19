@@ -184,6 +184,91 @@ export async function updateProduct(
   redirect("/admin/products");
 }
 
+export async function duplicateProduct(id: string): Promise<ActionResult & { newId?: string }> {
+  const gate = await requireAdminRole(["product_manager"]);
+  if (!gate.ok) return gate;
+
+  const supabase = await createClient();
+  const [{ data: product }, { data: variants }] = await Promise.all([
+    supabase.from("products").select("*").eq("id", id).maybeSingle(),
+    supabase.from("product_variants").select("*").eq("product_id", id).is("deleted_at", null),
+  ]);
+  if (!product) return { ok: false, message: "Product not found." };
+
+  const {
+    id: _id,
+    created_at: _created,
+    updated_at: _updated,
+    deleted_at: _deleted,
+    ...copy
+  } = product;
+
+  // Copies start as drafts so an accidental duplicate never goes live.
+  const baseRow = { ...copy, name: `${product.name} (Copy)`, is_published: false };
+
+  let inserted = await supabase
+    .from("products")
+    .insert({ ...baseRow, slug: `${product.slug}-copy` })
+    .select("id")
+    .single();
+
+  if (inserted.error?.code === "23505") {
+    inserted = await supabase
+      .from("products")
+      .insert({ ...baseRow, slug: `${product.slug}-copy-${Date.now().toString(36)}` })
+      .select("id")
+      .single();
+  }
+  if (inserted.error || !inserted.data) {
+    return { ok: false, message: inserted.error?.message ?? "Could not duplicate." };
+  }
+
+  for (const variant of variants ?? []) {
+    const {
+      id: _vid,
+      created_at: _vcreated,
+      updated_at: _vupdated,
+      deleted_at: _vdeleted,
+      ...variantCopy
+    } = variant;
+    await supabase.from("product_variants").insert({ ...variantCopy, product_id: inserted.data.id });
+  }
+
+  revalidatePath("/admin/products");
+  return { ok: true, newId: inserted.data.id };
+}
+
+export async function bulkSetProductsPublished(ids: string[], published: boolean): Promise<ActionResult> {
+  const gate = await requireAdminRole(["product_manager"]);
+  if (!gate.ok) return gate;
+  if (ids.length === 0) return { ok: false, message: "Select at least one product." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("products").update({ is_published: published }).in("id", ids);
+  if (error) return { ok: false, message: error.message };
+
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/gift-cards");
+  return { ok: true };
+}
+
+export async function bulkArchiveProducts(ids: string[]): Promise<ActionResult> {
+  const gate = await requireAdminRole(["product_manager"]);
+  if (!gate.ok) return gate;
+  if (ids.length === 0) return { ok: false, message: "Select at least one product." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("products")
+    .update({ deleted_at: new Date().toISOString(), is_published: false })
+    .in("id", ids);
+  if (error) return { ok: false, message: error.message };
+
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/gift-cards");
+  return { ok: true };
+}
+
 export async function deleteProduct(id: string): Promise<ActionResult> {
   const gate = await requireAdminRole(["product_manager"]);
   if (!gate.ok) return gate;
