@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AdvancedSection } from "@/components/admin/AdvancedSection";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import type { Category, Game } from "@/lib/types/catalog";
 
@@ -39,103 +39,93 @@ export function GameForm({
 
   return (
     <form action={formAction} className="flex max-w-2xl flex-col gap-4">
-      <Tabs defaultValue="general">
-        <TabsList>
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="images">Images</TabsTrigger>
-          <TabsTrigger value="seo">SEO</TabsTrigger>
-        </TabsList>
+      <div>
+        <Label htmlFor="name" className="mb-2">
+          Name
+        </Label>
+        <Input id="name" name="name" defaultValue={game?.name} required />
+      </div>
+      <div>
+        <Label htmlFor="slug" className="mb-2">
+          Slug
+        </Label>
+        <Input id="slug" name="slug" defaultValue={game?.slug} required />
+      </div>
+      <div>
+        <Label className="mb-2">Category</Label>
+        <input type="hidden" name="categoryId" value={categoryId} />
+        <Select value={categoryId || "none"} onValueChange={(v) => setCategoryId(v === "none" ? "" : v)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="None" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">None</SelectItem>
+            {categories.map((c) => (
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        <TabsContent value="general" className="flex flex-col gap-4 pt-4">
-          <div>
-            <Label htmlFor="name" className="mb-2">
-              Name
-            </Label>
-            <Input id="name" name="name" defaultValue={game?.name} required />
-          </div>
-          <div>
-            <Label htmlFor="slug" className="mb-2">
-              Slug
-            </Label>
-            <Input id="slug" name="slug" defaultValue={game?.slug} required />
-          </div>
-          <div>
-            <Label htmlFor="publisher" className="mb-2">
-              Publisher
-            </Label>
-            <Input id="publisher" name="publisher" defaultValue={game?.publisher ?? ""} />
-          </div>
-          <div>
-            <Label className="mb-2">Category</Label>
-            <input type="hidden" name="categoryId" value={categoryId} />
-            <Select value={categoryId || "none"} onValueChange={(v) => setCategoryId(v === "none" ? "" : v)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="None" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="description" className="mb-2">
-              Description
-            </Label>
-            <Textarea id="description" name="description" defaultValue={game?.description ?? ""} />
-          </div>
+      <div>
+        <Label className="mb-2">Logo</Label>
+        <input type="hidden" name="logoUrl" value={logoUrl ?? ""} />
+        <ImageUploader value={logoUrl} onChange={setLogoUrl} folder="games/logos" />
+      </div>
+      <div>
+        <Label className="mb-2">Banner (used as the card art on the homepage)</Label>
+        <input type="hidden" name="bannerUrl" value={bannerUrl ?? ""} />
+        <ImageUploader value={bannerUrl} onChange={setBannerUrl} folder="games/banners" />
+      </div>
 
-          <div className="flex flex-wrap gap-6">
-            <div className="flex items-center gap-2">
-              <input type="hidden" name="isPublished" value={isPublished ? "on" : ""} />
-              <Switch checked={isPublished} onCheckedChange={setIsPublished} id="isPublished" />
-              <Label htmlFor="isPublished">Published</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input type="hidden" name="isTrending" value={isTrending ? "on" : ""} />
-              <Switch checked={isTrending} onCheckedChange={setIsTrending} id="isTrending" />
-              <Label htmlFor="isTrending">Trending</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input type="hidden" name="isPopular" value={isPopular ? "on" : ""} />
-              <Switch checked={isPopular} onCheckedChange={setIsPopular} id="isPopular" />
-              <Label htmlFor="isPopular">Popular</Label>
-            </div>
-          </div>
-        </TabsContent>
+      <div className="flex items-center gap-2">
+        <input type="hidden" name="isPublished" value={isPublished ? "on" : ""} />
+        <Switch checked={isPublished} onCheckedChange={setIsPublished} id="isPublished" />
+        <Label htmlFor="isPublished">Published</Label>
+      </div>
 
-        <TabsContent value="images" className="flex flex-col gap-4 pt-4">
-          <div>
-            <Label className="mb-2">Logo</Label>
-            <input type="hidden" name="logoUrl" value={logoUrl ?? ""} />
-            <ImageUploader value={logoUrl} onChange={setLogoUrl} folder="games/logos" />
-          </div>
-          <div>
-            <Label className="mb-2">Banner</Label>
-            <input type="hidden" name="bannerUrl" value={bannerUrl ?? ""} />
-            <ImageUploader value={bannerUrl} onChange={setBannerUrl} folder="games/banners" />
-          </div>
-        </TabsContent>
+      <AdvancedSection>
+        <div>
+          <Label htmlFor="publisher" className="mb-2">
+            Publisher
+          </Label>
+          <Input id="publisher" name="publisher" defaultValue={game?.publisher ?? ""} />
+        </div>
+        <div>
+          <Label htmlFor="description" className="mb-2">
+            Description
+          </Label>
+          <Textarea id="description" name="description" defaultValue={game?.description ?? ""} />
+        </div>
 
-        <TabsContent value="seo" className="flex flex-col gap-4 pt-4">
-          <div>
-            <Label htmlFor="metaTitle" className="mb-2">
-              Meta Title
-            </Label>
-            <Input id="metaTitle" name="metaTitle" defaultValue={game?.meta_title ?? ""} />
+        <div className="flex flex-wrap gap-6">
+          <div className="flex items-center gap-2">
+            <input type="hidden" name="isTrending" value={isTrending ? "on" : ""} />
+            <Switch checked={isTrending} onCheckedChange={setIsTrending} id="isTrending" />
+            <Label htmlFor="isTrending">Trending</Label>
           </div>
-          <div>
-            <Label htmlFor="metaDescription" className="mb-2">
-              Meta Description
-            </Label>
-            <Textarea id="metaDescription" name="metaDescription" defaultValue={game?.meta_description ?? ""} />
+          <div className="flex items-center gap-2">
+            <input type="hidden" name="isPopular" value={isPopular ? "on" : ""} />
+            <Switch checked={isPopular} onCheckedChange={setIsPopular} id="isPopular" />
+            <Label htmlFor="isPopular">Popular</Label>
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+
+        <div>
+          <Label htmlFor="metaTitle" className="mb-2">
+            Meta Title
+          </Label>
+          <Input id="metaTitle" name="metaTitle" defaultValue={game?.meta_title ?? ""} />
+        </div>
+        <div>
+          <Label htmlFor="metaDescription" className="mb-2">
+            Meta Description
+          </Label>
+          <Textarea id="metaDescription" name="metaDescription" defaultValue={game?.meta_description ?? ""} />
+        </div>
+      </AdvancedSection>
 
       {state.message && <p className="text-destructive text-sm">{state.message}</p>}
 
