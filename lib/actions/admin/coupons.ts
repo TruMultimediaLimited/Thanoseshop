@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { couponSchema } from "@/lib/validation/admin/coupon";
 
 interface ActionResult {
@@ -14,14 +15,14 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return couponSchema.safeParse({
-    code: formData.get("code"),
-    discountType: formData.get("discountType"),
-    discountValue: formData.get("discountValue"),
-    minOrderAmount: formData.get("minOrderAmount"),
-    maxUses: formData.get("maxUses"),
-    maxUsesPerUser: formData.get("maxUsesPerUser"),
-    startsAt: formData.get("startsAt"),
-    expiresAt: formData.get("expiresAt"),
+    code: formString(formData, "code"),
+    discountType: formString(formData, "discountType"),
+    discountValue: formString(formData, "discountValue"),
+    minOrderAmount: formString(formData, "minOrderAmount"),
+    maxUses: formString(formData, "maxUses"),
+    maxUsesPerUser: formString(formData, "maxUsesPerUser"),
+    startsAt: formString(formData, "startsAt"),
+    expiresAt: formString(formData, "expiresAt"),
     isActive: formData.get("isActive") === "on",
   });
 }

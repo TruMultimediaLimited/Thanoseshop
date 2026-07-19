@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { homepageSectionSchema } from "@/lib/validation/admin/homepage-section";
 
 interface ActionResult {
@@ -14,10 +15,10 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return homepageSectionSchema.safeParse({
-    sectionType: formData.get("sectionType"),
-    title: formData.get("title"),
-    subtitle: formData.get("subtitle"),
-    configJson: formData.get("configJson"),
+    sectionType: formString(formData, "sectionType"),
+    title: formString(formData, "title"),
+    subtitle: formString(formData, "subtitle"),
+    configJson: formString(formData, "configJson"),
     isActive: formData.get("isActive") === "on",
   });
 }

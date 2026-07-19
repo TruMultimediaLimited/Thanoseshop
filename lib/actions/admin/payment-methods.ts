@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { paymentMethodSchema } from "@/lib/validation/admin/payment-method";
 
 interface ActionResult {
@@ -14,15 +15,15 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return paymentMethodSchema.safeParse({
-    name: formData.get("name"),
-    type: formData.get("type"),
-    accountNumber: formData.get("accountNumber"),
-    accountName: formData.get("accountName"),
-    bankName: formData.get("bankName"),
-    branch: formData.get("branch"),
-    routingNumber: formData.get("routingNumber"),
-    instructions: formData.get("instructions"),
-    sortOrder: formData.get("sortOrder"),
+    name: formString(formData, "name"),
+    type: formString(formData, "type"),
+    accountNumber: formString(formData, "accountNumber"),
+    accountName: formString(formData, "accountName"),
+    bankName: formString(formData, "bankName"),
+    branch: formString(formData, "branch"),
+    routingNumber: formString(formData, "routingNumber"),
+    instructions: formString(formData, "instructions"),
+    sortOrder: formString(formData, "sortOrder"),
     isActive: formData.get("isActive") === "on",
   });
 }

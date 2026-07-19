@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { seoSettingSchema, siteSettingsSchema } from "@/lib/validation/admin/settings";
 
 interface ActionResult {
@@ -16,16 +17,16 @@ export async function updateSiteSettings(_prevState: unknown, formData: FormData
   if (!gate.ok) return gate;
 
   const parsed = siteSettingsSchema.safeParse({
-    siteName: formData.get("siteName"),
-    logoUrl: formData.get("logoUrl"),
-    faviconUrl: formData.get("faviconUrl"),
-    contactEmail: formData.get("contactEmail"),
-    contactPhone: formData.get("contactPhone"),
-    whatsappNumber: formData.get("whatsappNumber"),
-    facebookUrl: formData.get("facebookUrl"),
-    footerText: formData.get("footerText"),
-    defaultMetaTitle: formData.get("defaultMetaTitle"),
-    defaultMetaDescription: formData.get("defaultMetaDescription"),
+    siteName: formString(formData, "siteName"),
+    logoUrl: formString(formData, "logoUrl"),
+    faviconUrl: formString(formData, "faviconUrl"),
+    contactEmail: formString(formData, "contactEmail"),
+    contactPhone: formString(formData, "contactPhone"),
+    whatsappNumber: formString(formData, "whatsappNumber"),
+    facebookUrl: formString(formData, "facebookUrl"),
+    footerText: formString(formData, "footerText"),
+    defaultMetaTitle: formString(formData, "defaultMetaTitle"),
+    defaultMetaDescription: formString(formData, "defaultMetaDescription"),
   });
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message };
 
@@ -57,11 +58,11 @@ export async function upsertSeoSetting(_prevState: unknown, formData: FormData):
   if (!gate.ok) return gate;
 
   const parsed = seoSettingSchema.safeParse({
-    pageKey: formData.get("pageKey"),
-    metaTitle: formData.get("metaTitle"),
-    metaDescription: formData.get("metaDescription"),
-    ogImageUrl: formData.get("ogImageUrl"),
-    canonicalUrl: formData.get("canonicalUrl"),
+    pageKey: formString(formData, "pageKey"),
+    metaTitle: formString(formData, "metaTitle"),
+    metaDescription: formString(formData, "metaDescription"),
+    ogImageUrl: formString(formData, "ogImageUrl"),
+    canonicalUrl: formString(formData, "canonicalUrl"),
   });
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message };
 

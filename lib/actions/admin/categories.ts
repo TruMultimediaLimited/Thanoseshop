@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { categorySchema } from "@/lib/validation/admin/category";
 
 interface ActionResult {
@@ -14,12 +15,12 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return categorySchema.safeParse({
-    name: formData.get("name"),
-    slug: formData.get("slug"),
-    description: formData.get("description"),
-    imageUrl: formData.get("imageUrl"),
-    parentId: formData.get("parentId"),
-    sortOrder: formData.get("sortOrder"),
+    name: formString(formData, "name"),
+    slug: formString(formData, "slug"),
+    description: formString(formData, "description"),
+    imageUrl: formString(formData, "imageUrl"),
+    parentId: formString(formData, "parentId"),
+    sortOrder: formString(formData, "sortOrder"),
     isPublished: formData.get("isPublished") === "on",
   });
 }

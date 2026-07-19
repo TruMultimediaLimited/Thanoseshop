@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { blogPostSchema } from "@/lib/validation/admin/blog";
 
 interface ActionResult {
@@ -14,14 +15,14 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return blogPostSchema.safeParse({
-    title: formData.get("title"),
-    slug: formData.get("slug"),
-    excerpt: formData.get("excerpt"),
-    content: formData.get("content"),
-    coverImageUrl: formData.get("coverImageUrl"),
-    status: formData.get("status"),
-    metaTitle: formData.get("metaTitle"),
-    metaDescription: formData.get("metaDescription"),
+    title: formString(formData, "title"),
+    slug: formString(formData, "slug"),
+    excerpt: formString(formData, "excerpt"),
+    content: formString(formData, "content"),
+    coverImageUrl: formString(formData, "coverImageUrl"),
+    status: formString(formData, "status"),
+    metaTitle: formString(formData, "metaTitle"),
+    metaDescription: formString(formData, "metaDescription"),
   });
 }
 

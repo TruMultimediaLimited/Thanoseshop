@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { regionSchema } from "@/lib/validation/admin/region";
 
 interface ActionResult {
@@ -14,10 +15,10 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return regionSchema.safeParse({
-    name: formData.get("name"),
-    code: formData.get("code"),
-    flagIconUrl: formData.get("flagIconUrl"),
-    sortOrder: formData.get("sortOrder"),
+    name: formString(formData, "name"),
+    code: formString(formData, "code"),
+    flagIconUrl: formString(formData, "flagIconUrl"),
+    sortOrder: formString(formData, "sortOrder"),
     isActive: formData.get("isActive") === "on",
   });
 }

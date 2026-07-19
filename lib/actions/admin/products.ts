@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { productSchema } from "@/lib/validation/admin/product";
 
 interface ActionResult {
@@ -15,34 +16,34 @@ interface ActionResult {
 function parseForm(formData: FormData) {
   let variants: unknown[] = [];
   try {
-    variants = JSON.parse((formData.get("variantsJson") as string) || "[]");
+    variants = JSON.parse((formString(formData, "variantsJson") as string) || "[]");
   } catch {
     variants = [];
   }
 
   return productSchema.safeParse({
-    name: formData.get("name"),
-    slug: formData.get("slug"),
-    productType: formData.get("productType"),
-    gameId: formData.get("gameId"),
-    categoryId: formData.get("categoryId"),
-    regionId: formData.get("regionId"),
-    description: formData.get("description"),
-    shortDescription: formData.get("shortDescription"),
-    thumbnailUrl: formData.get("thumbnailUrl"),
-    basePrice: formData.get("basePrice"),
+    name: formString(formData, "name"),
+    slug: formString(formData, "slug"),
+    productType: formString(formData, "productType"),
+    gameId: formString(formData, "gameId"),
+    categoryId: formString(formData, "categoryId"),
+    regionId: formString(formData, "regionId"),
+    description: formString(formData, "description"),
+    shortDescription: formString(formData, "shortDescription"),
+    thumbnailUrl: formString(formData, "thumbnailUrl"),
+    basePrice: formString(formData, "basePrice"),
     hasVariants: formData.get("hasVariants") === "on",
-    deliveryType: formData.get("deliveryType"),
-    deliveryInstructions: formData.get("deliveryInstructions"),
+    deliveryType: formString(formData, "deliveryType"),
+    deliveryInstructions: formString(formData, "deliveryInstructions"),
     requiresPlayerId: formData.get("requiresPlayerId") === "on",
-    stockQuantity: formData.get("stockQuantity"),
+    stockQuantity: formString(formData, "stockQuantity"),
     isPublished: formData.get("isPublished") === "on",
     isFeatured: formData.get("isFeatured") === "on",
     isTrending: formData.get("isTrending") === "on",
     isBestSeller: formData.get("isBestSeller") === "on",
-    metaTitle: formData.get("metaTitle"),
-    metaDescription: formData.get("metaDescription"),
-    sortOrder: formData.get("sortOrder"),
+    metaTitle: formString(formData, "metaTitle"),
+    metaDescription: formString(formData, "metaDescription"),
+    sortOrder: formString(formData, "sortOrder"),
     variants,
   });
 }

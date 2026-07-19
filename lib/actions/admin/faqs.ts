@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { faqSchema } from "@/lib/validation/admin/faq";
 
 interface ActionResult {
@@ -14,10 +15,10 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return faqSchema.safeParse({
-    question: formData.get("question"),
-    answer: formData.get("answer"),
-    productId: formData.get("productId"),
-    sortOrder: formData.get("sortOrder"),
+    question: formString(formData, "question"),
+    answer: formString(formData, "answer"),
+    productId: formString(formData, "productId"),
+    sortOrder: formString(formData, "sortOrder"),
     isPublished: formData.get("isPublished") === "on",
   });
 }

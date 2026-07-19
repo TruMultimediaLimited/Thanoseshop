@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { bannerSchema } from "@/lib/validation/admin/banner";
 
 interface ActionResult {
@@ -14,13 +15,13 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return bannerSchema.safeParse({
-    title: formData.get("title"),
-    subtitle: formData.get("subtitle"),
-    imageUrl: formData.get("imageUrl"),
-    mobileImageUrl: formData.get("mobileImageUrl"),
-    linkUrl: formData.get("linkUrl"),
-    placement: formData.get("placement"),
-    sortOrder: formData.get("sortOrder"),
+    title: formString(formData, "title"),
+    subtitle: formString(formData, "subtitle"),
+    imageUrl: formString(formData, "imageUrl"),
+    mobileImageUrl: formString(formData, "mobileImageUrl"),
+    linkUrl: formString(formData, "linkUrl"),
+    placement: formString(formData, "placement"),
+    sortOrder: formString(formData, "sortOrder"),
     isActive: formData.get("isActive") === "on",
   });
 }

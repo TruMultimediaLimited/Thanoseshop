@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminRole } from "@/lib/actions/admin/guard";
+import { formString } from "@/lib/actions/admin/form";
 import { gameSchema } from "@/lib/validation/admin/game";
 
 interface ActionResult {
@@ -14,16 +15,16 @@ interface ActionResult {
 
 function parseForm(formData: FormData) {
   return gameSchema.safeParse({
-    name: formData.get("name"),
-    slug: formData.get("slug"),
-    categoryId: formData.get("categoryId"),
-    logoUrl: formData.get("logoUrl"),
-    bannerUrl: formData.get("bannerUrl"),
-    description: formData.get("description"),
-    publisher: formData.get("publisher"),
-    metaTitle: formData.get("metaTitle"),
-    metaDescription: formData.get("metaDescription"),
-    sortOrder: formData.get("sortOrder"),
+    name: formString(formData, "name"),
+    slug: formString(formData, "slug"),
+    categoryId: formString(formData, "categoryId"),
+    logoUrl: formString(formData, "logoUrl"),
+    bannerUrl: formString(formData, "bannerUrl"),
+    description: formString(formData, "description"),
+    publisher: formString(formData, "publisher"),
+    metaTitle: formString(formData, "metaTitle"),
+    metaDescription: formString(formData, "metaDescription"),
+    sortOrder: formString(formData, "sortOrder"),
     isPublished: formData.get("isPublished") === "on",
     isTrending: formData.get("isTrending") === "on",
     isPopular: formData.get("isPopular") === "on",
