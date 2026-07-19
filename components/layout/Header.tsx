@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingCart } from "lucide-react";
 
@@ -45,9 +46,14 @@ export async function Header() {
         />
 
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <span className="text-lg font-semibold tracking-tight">
-            {siteName}
-          </span>
+          <Image
+            src={settings?.logo_url ?? "/logo.png"}
+            alt={siteName}
+            width={40}
+            height={40}
+            className="h-10 w-10 rounded-md object-cover"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
