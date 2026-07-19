@@ -46,7 +46,8 @@ coupon), `CartItemRow`.
 `AdminSidebar` (role-filtered nav), `ImageUploader` (WebP conversion,
 click-to-replace), `AdvancedSection` (**plain CSS-toggle collapsible that
 keeps fields mounted — use this, not Radix Accordion, inside forms**),
-`MediaUploadCard`, form components per resource under
+`MediaUploadCard`, `analytics/DashboardCharts` (recharts revenue/orders
+charts on the dashboard), form components per resource under
 `products/ games/ categories/ regions/ coupons/ banners/ faqs/ blog/
 homepage/ payments/ settings/ announcements/ static-pages/`, plus
 `ProductVariantsEditor`, `GalleryEditor` (multi-image editor for

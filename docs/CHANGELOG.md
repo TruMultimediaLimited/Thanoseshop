@@ -2,6 +2,12 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Module 4 — Admin analytics
+- Dashboard: 30-day revenue area chart + orders bar chart (recharts, one
+  series per chart, theme tokens), Revenue(30d)/Customers stat cards, and a
+  recent-orders table with status badges and links.
+- Revenue counts paid/processing/completed orders only.
+
 ## Module 3 — Storefront consumption
 - AnnouncementBar renders the topmost active announcement above the header.
 - `/pages/[slug]` serves admin-managed static pages (with SEO metadata and

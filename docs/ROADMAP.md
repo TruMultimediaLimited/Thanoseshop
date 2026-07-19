@@ -33,9 +33,11 @@ Announcement top-bar above the header, `/pages/[slug]` static page route
 (+ sitemap entries), product page gallery with thumbnail switcher,
 sale-price strikethrough + percent-off badges on product page and cards.
 
-## Module 4 — Admin analytics (awaiting approval)
+## Module 4 — Admin analytics ✅ (this module)
 
-Stat cards, revenue/orders charts, recent-orders table on `/admin`.
+Dashboard: six stat cards (adds 30-day revenue + customer count), 30-day
+revenue area chart + orders bar chart (recharts, theme chart tokens,
+single-series each), recent-orders table with status badges.
 
 ## Module 5 — Bulk product actions (awaiting approval)
 
