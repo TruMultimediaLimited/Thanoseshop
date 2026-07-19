@@ -57,10 +57,14 @@ export function ProductCard({
 
           <div className="absolute top-2 left-2 flex flex-wrap gap-1">
             {product.is_best_seller && (
-              <Badge variant="accent">Best Seller</Badge>
+              <Badge variant="accent" className="font-semibold shadow-sm">
+                Best Seller
+              </Badge>
             )}
             {product.is_trending && !product.is_best_seller && (
-              <Badge variant="secondary">Trending</Badge>
+              <Badge variant="secondary" className="font-semibold shadow-sm">
+                Trending
+              </Badge>
             )}
           </div>
 
@@ -86,7 +90,7 @@ export function ProductCard({
               {product.game.name}
             </p>
           )}
-          <p className="line-clamp-2 text-sm font-medium">{product.name}</p>
+          <p className="line-clamp-2 text-sm font-semibold">{product.name}</p>
           {price && (
             <p className="mt-1 text-sm font-semibold">
               {price.label && (

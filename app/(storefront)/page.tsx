@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { getHomepageSections } from "@/lib/supabase/queries/homepage";
 import { getBanners } from "@/lib/supabase/queries/banners";
 import {
@@ -10,6 +12,7 @@ import {
   getLatestProducts,
 } from "@/lib/supabase/queries/catalog";
 import { HeroBanner } from "@/components/home/HeroBanner";
+import { CategoryPills } from "@/components/home/CategoryPills";
 import { SearchBarSection } from "@/components/home/SearchBarSection";
 import { GamesRow } from "@/components/home/GamesRow";
 import { ProductRailSection } from "@/components/home/ProductRailSection";
@@ -148,14 +151,22 @@ export default async function Home() {
     );
   }
 
-  const wishlistedIds = await getWishlistedProductIds();
+  const [wishlistedIds, categories] = await Promise.all([
+    getWishlistedProductIds(),
+    getCategories(),
+  ]);
   const rendered = await Promise.all(
     sections.map((section) => renderSection(section, wishlistedIds)),
   );
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
-      {rendered.map((node, i) => (node ? <div key={sections[i].id}>{node}</div> : null))}
+      {rendered.map((node, i) => (
+        <Fragment key={sections[i].id}>
+          {node && <div>{node}</div>}
+          {sections[i].section_type === "hero_banner" && <CategoryPills categories={categories} />}
+        </Fragment>
+      ))}
     </div>
   );
 }
