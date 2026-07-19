@@ -23,7 +23,7 @@ export function SearchButton({ className }: { className?: string }) {
         onClick={() => setOpen((o) => !o)}
         className={className}
       >
-        {open ? <X className="size-5" /> : <Search className="size-5" />}
+        {open ? <X className="size-4" /> : <Search className="size-4" />}
       </button>
 
       {open && (

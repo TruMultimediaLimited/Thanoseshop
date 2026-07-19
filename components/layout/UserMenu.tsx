@@ -40,8 +40,8 @@ export function UserMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button type="button" aria-label="Account menu" className={triggerClassName}>
-          <Avatar className="size-7">
-            <AvatarFallback>{initial}</AvatarFallback>
+          <Avatar className="size-6">
+            <AvatarFallback className="text-xs">{initial}</AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>

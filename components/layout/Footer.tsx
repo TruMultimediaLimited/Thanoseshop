@@ -46,9 +46,9 @@ export async function Footer() {
               <Image
                 src={settings?.logo_url ?? "/logo.png"}
                 alt={siteName}
-                width={32}
+                width={35}
                 height={32}
-                className="h-8 w-8 rounded-md object-cover"
+                className="h-8 w-auto object-contain"
               />
               <p className="text-lg font-semibold tracking-tight">{siteName}</p>
             </div>
