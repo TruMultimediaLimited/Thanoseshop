@@ -4,15 +4,29 @@ import { Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { UserMenu } from "@/components/layout/UserMenu";
+import { createClient } from "@/lib/supabase/server";
 import { getCategories, getGames } from "@/lib/supabase/queries/catalog";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
 
 export async function Header() {
-  const [categories, games, settings] = await Promise.all([
+  const supabase = await createClient();
+  const [categories, games, settings, { data: { user } }] = await Promise.all([
     getCategories(),
     getGames({ popularOnly: true, limit: 8 }),
     getSiteSettings(),
+    supabase.auth.getUser(),
   ]);
+
+  const profile = user
+    ? (
+        await supabase
+          .from("profiles")
+          .select("full_name, role")
+          .eq("id", user.id)
+          .single()
+      ).data
+    : null;
 
   const siteName = settings?.site_name ?? "Thanos E-Shop";
 
@@ -70,14 +84,22 @@ export async function Header() {
             </Button>
           </Link>
 
-          <div className="hidden items-center gap-2 sm:flex">
-            <Link href="/login">
-              <Button variant="ghost">Log in</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Sign up</Button>
-            </Link>
-          </div>
+          {user ? (
+            <UserMenu
+              fullName={profile?.full_name ?? null}
+              email={user.email ?? ""}
+              isAdmin={profile?.role === "admin"}
+            />
+          ) : (
+            <div className="hidden items-center gap-2 sm:flex">
+              <Link href="/login">
+                <Button variant="ghost">Log in</Button>
+              </Link>
+              <Link href="/register">
+                <Button>Sign up</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>
