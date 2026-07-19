@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { getGameBySlug, getProducts } from "@/lib/supabase/queries/catalog";
+import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
 
 export async function generateMetadata({
   params,
@@ -28,7 +29,10 @@ export default async function GamePage({
   const game = await getGameBySlug(slug);
   if (!game) notFound();
 
-  const { products } = await getProducts({ gameSlug: slug, pageSize: 48 });
+  const [{ products }, wishlistedIds] = await Promise.all([
+    getProducts({ gameSlug: slug, pageSize: 48 }),
+    getWishlistedProductIds(),
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -57,7 +61,11 @@ export default async function GamePage({
           <p className="text-muted-foreground max-w-2xl text-sm">{game.description}</p>
         )}
 
-        <ProductGrid products={products} emptyMessage="No top-ups published for this game yet." />
+        <ProductGrid
+          products={products}
+          emptyMessage="No top-ups published for this game yet."
+          wishlistedIds={wishlistedIds}
+        />
       </div>
     </div>
   );

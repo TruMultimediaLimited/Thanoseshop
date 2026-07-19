@@ -11,12 +11,14 @@ export function ProductRailSection({
   products,
   viewAllHref,
   emptyMessage,
+  wishlistedIds,
 }: {
   title?: string | null;
   subtitle?: string | null;
   products: ProductWithRelations[];
   viewAllHref?: string;
   emptyMessage: string;
+  wishlistedIds?: Set<string>;
 }) {
   return (
     <section>
@@ -28,7 +30,7 @@ export function ProductRailSection({
           </Button>
         )}
       </div>
-      <ProductGrid products={products} emptyMessage={emptyMessage} />
+      <ProductGrid products={products} emptyMessage={emptyMessage} wishlistedIds={wishlistedIds} />
     </section>
   );
 }

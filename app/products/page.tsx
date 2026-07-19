@@ -4,6 +4,7 @@ import { ProductFilters } from "@/components/catalog/ProductFilters";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { Pagination } from "@/components/common/Pagination";
 import { getCategories, getGames, getProducts, type ProductFilters as Filters } from "@/lib/supabase/queries/catalog";
+import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
 import type { ProductType } from "@/lib/types/catalog";
 
 export const metadata: Metadata = {
@@ -31,10 +32,11 @@ export default async function ProductsPage({
     pageSize: 24,
   };
 
-  const [{ products, total, pageSize }, categories, games] = await Promise.all([
+  const [{ products, total, pageSize }, categories, games, wishlistedIds] = await Promise.all([
     getProducts(filters),
     getCategories(),
     getGames(),
+    getWishlistedProductIds(),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -53,6 +55,7 @@ export default async function ProductsPage({
       <ProductGrid
         products={products}
         emptyMessage="No products match your filters."
+        wishlistedIds={wishlistedIds}
       />
 
       <Pagination

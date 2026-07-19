@@ -5,6 +5,7 @@ import { ProductDetailClient } from "@/components/catalog/ProductDetailClient";
 import { FaqSection } from "@/components/home/FaqSection";
 import { getFaqs, getProductBySlug } from "@/lib/supabase/queries/catalog";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
+import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
 
 export async function generateMetadata({
   params,
@@ -40,11 +41,14 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
-  const faqs = await getFaqs(product.id);
+  const [faqs, wishlistedIds] = await Promise.all([
+    getFaqs(product.id),
+    getWishlistedProductIds(),
+  ]);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
-      <ProductDetailClient product={product} />
+      <ProductDetailClient product={product} isWishlisted={wishlistedIds.has(product.id)} />
       {faqs.length > 0 && <FaqSection faqs={faqs} title="Product FAQs" />}
     </div>
   );

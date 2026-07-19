@@ -9,11 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { VariantSelector } from "@/components/catalog/VariantSelector";
+import { WishlistButton } from "@/components/catalog/WishlistButton";
 import { formatPrice } from "@/components/catalog/ProductCard";
 import { addToCart } from "@/lib/actions/cart";
 import type { ProductWithRelations } from "@/lib/types/catalog";
 
-export function ProductDetailClient({ product }: { product: ProductWithRelations }) {
+export function ProductDetailClient({
+  product,
+  isWishlisted = false,
+}: {
+  product: ProductWithRelations;
+  isWishlisted?: boolean;
+}) {
   const publishedVariants = product.variants.filter((v) => v.is_published);
   const [variantId, setVariantId] = useState<string | null>(
     publishedVariants[0]?.id ?? null,
@@ -58,6 +65,11 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
             priority
           />
         )}
+        <WishlistButton
+          productId={product.id}
+          initialWishlisted={isWishlisted}
+          className="absolute top-3 right-3"
+        />
       </div>
 
       <div className="flex flex-col gap-5">

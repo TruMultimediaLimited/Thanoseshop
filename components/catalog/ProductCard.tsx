@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { WishlistButton } from "@/components/catalog/WishlistButton";
 import type { ProductWithRelations } from "@/lib/types/catalog";
 
 function formatPrice(amount: number) {
@@ -27,7 +28,13 @@ function displayPrice(product: ProductWithRelations) {
   return null;
 }
 
-export function ProductCard({ product }: { product: ProductWithRelations }) {
+export function ProductCard({
+  product,
+  isWishlisted = false,
+}: {
+  product: ProductWithRelations;
+  isWishlisted?: boolean;
+}) {
   const price = displayPrice(product);
 
   return (
@@ -56,6 +63,12 @@ export function ProductCard({ product }: { product: ProductWithRelations }) {
               <Badge variant="secondary">Trending</Badge>
             )}
           </div>
+
+          <WishlistButton
+            productId={product.id}
+            initialWishlisted={isWishlisted}
+            className="absolute top-2 right-2 size-8"
+          />
 
           {product.region && (
             <Badge

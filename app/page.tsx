@@ -18,6 +18,7 @@ import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { Testimonials } from "@/components/home/Testimonials";
 import { FaqSection } from "@/components/home/FaqSection";
 import { Newsletter } from "@/components/home/Newsletter";
+import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
 import type { HomepageSection } from "@/lib/types/content";
 
 function limitOf(section: HomepageSection, fallback = 8) {
@@ -25,7 +26,7 @@ function limitOf(section: HomepageSection, fallback = 8) {
   return typeof raw === "number" ? raw : fallback;
 }
 
-async function renderSection(section: HomepageSection) {
+async function renderSection(section: HomepageSection, wishlistedIds: Set<string>) {
   switch (section.section_type) {
     case "hero_banner": {
       const banners = await getBanners("hero");
@@ -50,6 +51,7 @@ async function renderSection(section: HomepageSection) {
           products={products}
           viewAllHref="/gift-cards"
           emptyMessage="No gift cards published yet."
+          wishlistedIds={wishlistedIds}
         />
       );
     }
@@ -72,6 +74,7 @@ async function renderSection(section: HomepageSection) {
           products={products}
           viewAllHref="/products?sort=best_selling"
           emptyMessage="No best sellers yet."
+          wishlistedIds={wishlistedIds}
         />
       );
     }
@@ -84,6 +87,7 @@ async function renderSection(section: HomepageSection) {
           products={products}
           viewAllHref="/products"
           emptyMessage="No products published yet."
+          wishlistedIds={wishlistedIds}
         />
       );
     }
@@ -96,6 +100,7 @@ async function renderSection(section: HomepageSection) {
           subtitle={section.subtitle}
           products={products}
           emptyMessage="No deals right now."
+          wishlistedIds={wishlistedIds}
         />
       );
     }
@@ -137,7 +142,10 @@ export default async function Home() {
     );
   }
 
-  const rendered = await Promise.all(sections.map((section) => renderSection(section)));
+  const wishlistedIds = await getWishlistedProductIds();
+  const rendered = await Promise.all(
+    sections.map((section) => renderSection(section, wishlistedIds)),
+  );
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
