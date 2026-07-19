@@ -11,6 +11,20 @@ export type PaymentSubmissionStatus = "pending" | "verified" | "rejected";
 export type PaymentMethodType = "bkash" | "nagad" | "rocket" | "bank" | "other";
 export type DiscountType = "percent" | "fixed";
 
+export interface Coupon {
+  id: string;
+  code: string;
+  discount_type: DiscountType;
+  discount_value: number;
+  min_order_amount: number;
+  max_uses: number | null;
+  max_uses_per_user: number | null;
+  used_count: number;
+  starts_at: string | null;
+  expires_at: string | null;
+  is_active: boolean;
+}
+
 export interface PaymentMethod {
   id: string;
   name: string;
