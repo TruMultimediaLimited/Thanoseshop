@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, LogOut, Package, ShieldCheck, User } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -20,10 +19,12 @@ export function UserMenu({
   fullName,
   email,
   isAdmin,
+  triggerClassName,
 }: {
   fullName: string | null;
   email: string;
   isAdmin: boolean;
+  triggerClassName?: string;
 }) {
   const router = useRouter();
   const initial = (fullName ?? email).slice(0, 1).toUpperCase();
@@ -38,11 +39,11 @@ export function UserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Account menu">
-          <Avatar className="size-8">
+        <button type="button" aria-label="Account menu" className={triggerClassName}>
+          <Avatar className="size-7">
             <AvatarFallback>{initial}</AvatarFallback>
           </Avatar>
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="truncate">{fullName ?? email}</DropdownMenuLabel>
