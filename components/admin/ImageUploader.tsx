@@ -55,10 +55,41 @@ export function ImageUploader({
     }
   }
 
-  if (value) {
-    return (
-      <div className="bg-muted relative aspect-video w-full max-w-xs overflow-hidden rounded-lg border">
-        <Image src={value} alt="" fill className="object-cover" unoptimized />
+  return (
+    <div className="relative w-full max-w-xs">
+      <label
+        className={
+          value
+            ? "bg-muted relative block aspect-video w-full cursor-pointer overflow-hidden rounded-lg border"
+            : "hover:border-primary/50 flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed p-6 text-center"
+        }
+      >
+        {value ? (
+          <>
+            <Image src={value} alt="" fill className="object-cover" unoptimized />
+            {isUploading && (
+              <div className="bg-background/70 absolute inset-0 flex items-center justify-center text-sm">
+                Uploading…
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <Upload className="text-muted-foreground size-6" />
+            <span className="text-muted-foreground text-sm">
+              {isUploading ? "Uploading…" : "Click to upload an image"}
+            </span>
+          </>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+          disabled={isUploading}
+        />
+      </label>
+      {value && !isUploading && (
         <Button
           type="button"
           variant="secondary"
@@ -68,17 +99,7 @@ export function ImageUploader({
         >
           <X className="size-4" />
         </Button>
-      </div>
-    );
-  }
-
-  return (
-    <label className="hover:border-primary/50 flex w-full max-w-xs cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed p-6 text-center">
-      <Upload className="text-muted-foreground size-6" />
-      <span className="text-muted-foreground text-sm">
-        {isUploading ? "Uploading…" : "Click to upload an image"}
-      </span>
-      <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} disabled={isUploading} />
-    </label>
+      )}
+    </div>
   );
 }

@@ -81,7 +81,7 @@ export function ProductVariantsEditor({
               type="number"
               step="0.01"
               value={variant.compareAtPrice ?? ""}
-              onChange={(e) => update(index, { compareAtPrice: e.target.value })}
+              onChange={(e) => update(index, { compareAtPrice: e.target.value === "" ? null : e.target.value })}
             />
           </div>
           <div>
@@ -89,7 +89,7 @@ export function ProductVariantsEditor({
             <Input
               type="number"
               value={variant.stockQuantity ?? ""}
-              onChange={(e) => update(index, { stockQuantity: e.target.value })}
+              onChange={(e) => update(index, { stockQuantity: e.target.value === "" ? null : e.target.value })}
               placeholder="∞"
             />
           </div>
