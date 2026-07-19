@@ -9,7 +9,8 @@ const ADMIN_ORDER_SELECT = `
   items:order_items ( * ),
   payment_method:payment_methods ( id, name, type ),
   payment_submission:payment_submissions ( * ),
-  customer:profiles!orders_user_id_fkey ( id, full_name, phone )
+  customer:profiles!orders_user_id_fkey ( id, full_name, phone ),
+  events:order_events ( * )
 `;
 
 export async function getAdminOrders(status?: OrderStatus) {

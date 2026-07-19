@@ -38,9 +38,23 @@ index coverage per relationship. RLS enabled on every table.
   a real `SECURITY DEFINER`/`current_user` bug — the guard trigger must NOT be
   SECURITY DEFINER).
 
-## Planned deltas (Module 2, approved scope)
+| 12_spec_deltas | `order_events` (timeline + admin notes, `order_event_type` enum, auto-logged by an AFTER INSERT/UPDATE trigger on `orders`), `announcements`, `static_pages`, `products.compare_at_price` |
 
-`order_events` (timeline + notes via event_type enum), `announcements`,
-`static_pages`, `product_images` (gallery), `products.compare_at_price`
-(sale price). Deferred: brands, tags, blog_categories, email/notification
-templates.
+## Module 2 notes
+
+- **`order_events`**: every status transition is written by the
+  `orders_log_status_change` trigger (SECURITY DEFINER; uses `auth.uid()`,
+  which is JWT-based and safe under definer context). Admin notes are
+  inserted directly with `event_type='note'`. RLS: customers can read the
+  status timeline of their own orders only — notes are admin-internal.
+- **Gallery**: uses the pre-existing `products.gallery` jsonb column
+  (migration 3). A separate `product_images` table was considered and
+  rejected — it would duplicate data the schema already holds.
+- Migration 12 was validated on the local Postgres 16 harness (all 12
+  migrations + trigger/RLS smoke tests) before being applied to the live
+  project.
+
+## Deferred (explicit owner decision)
+
+Brands, tags, blog_categories, email/notification templates, per-game
+region join.

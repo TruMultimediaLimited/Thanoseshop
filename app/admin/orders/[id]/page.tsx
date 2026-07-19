@@ -8,8 +8,9 @@ import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatPrice } from "@/components/catalog/ProductCard";
 import { OrderActions } from "@/components/admin/orders/OrderActions";
 import { DeliverItemForm } from "@/components/admin/orders/DeliverItemForm";
+import { OrderTimeline } from "@/components/admin/orders/OrderTimeline";
 import { getAdminOrderById, getSignedScreenshotUrl } from "@/lib/supabase/queries/admin/orders";
-import type { OrderItem } from "@/lib/types/commerce";
+import type { OrderEvent, OrderItem } from "@/lib/types/commerce";
 
 export const metadata: Metadata = { title: "Order Detail | Admin" };
 
@@ -125,6 +126,8 @@ export default async function AdminOrderDetailPage({
               )}
             </Card>
           )}
+
+          <OrderTimeline orderId={order.id} events={(order.events ?? []) as OrderEvent[]} />
         </div>
       </div>
     </div>

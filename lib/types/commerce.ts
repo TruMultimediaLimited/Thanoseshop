@@ -102,6 +102,17 @@ export interface OrderWithItems extends Order {
   payment_method: Pick<PaymentMethod, "id" | "name" | "type"> | null;
 }
 
+export interface OrderEvent {
+  id: string;
+  order_id: string;
+  event_type: "status_change" | "note";
+  from_status: OrderStatus | null;
+  to_status: OrderStatus | null;
+  note: string | null;
+  actor_id: string | null;
+  created_at: string;
+}
+
 export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
   pending: "Pending",
   payment_review: "Payment Under Review",

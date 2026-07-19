@@ -23,6 +23,8 @@ import {
   Bell,
   ScrollText,
   ShieldCheck,
+  Megaphone,
+  FileText,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -56,6 +58,8 @@ const NAV = [
     items: [
       { href: "/admin/homepage", label: "Homepage Manager", icon: LayoutDashboard, roles: ["product_manager"] },
       { href: "/admin/banners", label: "Banner Manager", icon: ImagePlay, roles: ["product_manager"] },
+      { href: "/admin/announcements", label: "Announcements", icon: Megaphone, roles: ["product_manager"] },
+      { href: "/admin/static-pages", label: "Static Pages", icon: FileText, roles: ["product_manager"] },
       { href: "/admin/faqs", label: "FAQs", icon: HelpCircle, roles: ["product_manager"] },
       { href: "/admin/blog", label: "Blog", icon: Newspaper, roles: ["product_manager"] },
       { href: "/admin/media", label: "Media Library", icon: ImageIcon, roles: ["product_manager"] },

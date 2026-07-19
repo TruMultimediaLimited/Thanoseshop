@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { AdvancedSection } from "@/components/admin/AdvancedSection";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { GalleryEditor } from "@/components/admin/products/GalleryEditor";
 import { ProductVariantsEditor, type VariantRow } from "@/components/admin/products/ProductVariantsEditor";
 import type { Category, Game, ProductWithRelations, Region } from "@/lib/types/catalog";
 
@@ -54,6 +55,7 @@ export function ProductForm({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(product?.thumbnail_url ?? null);
+  const [gallery, setGallery] = useState<string[]>(product?.gallery ?? []);
   const [productType, setProductType] = useState(product?.product_type ?? "topup");
   const [deliveryType, setDeliveryType] = useState(product?.delivery_type ?? "manual_topup");
   const [gameId, setGameId] = useState(product?.game_id ?? "");
@@ -81,6 +83,7 @@ export function ProductForm({
   return (
     <form action={formAction} className="flex max-w-3xl flex-col gap-4">
       <input type="hidden" name="variantsJson" value={JSON.stringify(variants)} />
+      <input type="hidden" name="galleryJson" value={JSON.stringify(gallery)} />
 
       <div>
         <Label htmlFor="name" className="mb-2">
@@ -188,12 +191,24 @@ export function ProductForm({
       {hasVariants ? (
         <ProductVariantsEditor variants={variants} onChange={setVariants} />
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <Label htmlFor="basePrice" className="mb-2">
               Price
             </Label>
             <Input id="basePrice" name="basePrice" type="number" step="0.01" defaultValue={product?.base_price ?? ""} />
+          </div>
+          <div>
+            <Label htmlFor="compareAtPrice" className="mb-2">
+              Compare-at Price (optional)
+            </Label>
+            <Input
+              id="compareAtPrice"
+              name="compareAtPrice"
+              type="number"
+              step="0.01"
+              defaultValue={product?.compare_at_price ?? ""}
+            />
           </div>
           <div>
             <Label htmlFor="stockQuantity" className="mb-2">
@@ -250,6 +265,11 @@ export function ProductForm({
             Description
           </Label>
           <Textarea id="description" name="description" defaultValue={product?.description ?? ""} rows={4} />
+        </div>
+
+        <div>
+          <Label className="mb-2">Gallery Images</Label>
+          <GalleryEditor images={gallery} onChange={setGallery} />
         </div>
 
         <div className="flex flex-wrap gap-6">

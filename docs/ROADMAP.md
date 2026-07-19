@@ -19,12 +19,13 @@ tabbed-form fixes, admin form simplification, WebP upload pipeline.
 #FF6A00 / #FFC107 / #22C55E), button/card/input polish, desktop nav row,
 footer social + payment strip, framer-motion FadeIn.
 
-## Module 2 — DB deltas + admin management (awaiting approval)
+## Module 2 — DB deltas + admin management ✅ (this module)
 
-Migration `00000000000012_spec_deltas.sql`: `order_events` (timeline + notes),
-`announcements`, `static_pages`, `product_images`, `products.compare_at_price`
-+ RLS; admin CRUD for each; order detail timeline/notes UI; ProductForm
-gallery + sale price.
+Migration `00000000000012_spec_deltas.sql`: `order_events` (timeline + notes,
+trigger-logged), `announcements`, `static_pages`, `products.compare_at_price`
++ RLS (gallery reuses the existing `products.gallery` jsonb column); admin
+CRUD for Announcements + Static Pages; order detail timeline/notes UI;
+ProductForm gallery editor + sale price.
 
 ## Module 3 — Storefront consumption (awaiting approval)
 

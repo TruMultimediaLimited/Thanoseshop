@@ -27,7 +27,10 @@ helpers (`lib/supabase/queries/**`) guarded by RLS.
 - `admin/form.ts` — `formString()` FormData normalizer (required for all
   admin form parsers)
 - `admin/orders.ts` — verifyPayment, rejectPayment, startProcessing,
-  deliverOrderItem, markOrderCompleted, refundOrder (role: order_manager)
+  deliverOrderItem, markOrderCompleted, refundOrder, addOrderNote
+  (role: order_manager)
+- `admin/announcements.ts`, `admin/static-pages.ts` — CRUD
+  (role: product_manager)
 - `admin/products.ts` (+ `syncVariants` soft-delete logic), `admin/games.ts`,
   `admin/categories.ts`, `admin/regions.ts`, `admin/coupons.ts`,
   `admin/banners.ts`, `admin/faqs.ts`, `admin/blog.ts`,

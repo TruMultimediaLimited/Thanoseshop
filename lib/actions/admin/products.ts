@@ -13,13 +13,18 @@ interface ActionResult {
   message?: string;
 }
 
-function parseForm(formData: FormData) {
-  let variants: unknown[] = [];
+function parseJsonArray(raw: string): unknown[] {
   try {
-    variants = JSON.parse((formString(formData, "variantsJson") as string) || "[]");
+    const parsed = JSON.parse(raw || "[]");
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    variants = [];
+    return [];
   }
+}
+
+function parseForm(formData: FormData) {
+  const variants = parseJsonArray(formString(formData, "variantsJson"));
+  const gallery = parseJsonArray(formString(formData, "galleryJson"));
 
   return productSchema.safeParse({
     name: formString(formData, "name"),
@@ -31,7 +36,9 @@ function parseForm(formData: FormData) {
     description: formString(formData, "description"),
     shortDescription: formString(formData, "shortDescription"),
     thumbnailUrl: formString(formData, "thumbnailUrl"),
+    gallery,
     basePrice: formString(formData, "basePrice"),
+    compareAtPrice: formString(formData, "compareAtPrice"),
     hasVariants: formData.get("hasVariants") === "on",
     deliveryType: formString(formData, "deliveryType"),
     deliveryInstructions: formString(formData, "deliveryInstructions"),
@@ -59,7 +66,9 @@ function toProductRow(data: ReturnType<typeof productSchema.parse>) {
     description: data.description || null,
     short_description: data.shortDescription || null,
     thumbnail_url: data.thumbnailUrl || null,
+    gallery: data.gallery,
     base_price: data.hasVariants ? null : data.basePrice ? Number(data.basePrice) : null,
+    compare_at_price: data.hasVariants ? null : data.compareAtPrice ? Number(data.compareAtPrice) : null,
     has_variants: data.hasVariants,
     delivery_type: data.deliveryType,
     delivery_instructions: data.deliveryInstructions || null,

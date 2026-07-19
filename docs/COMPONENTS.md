@@ -47,7 +47,10 @@ click-to-replace), `AdvancedSection` (**plain CSS-toggle collapsible that
 keeps fields mounted — use this, not Radix Accordion, inside forms**),
 `MediaUploadCard`, form components per resource under
 `products/ games/ categories/ regions/ coupons/ banners/ faqs/ blog/
-homepage/ payments/ settings/`, plus `ProductVariantsEditor`.
+homepage/ payments/ settings/ announcements/ static-pages/`, plus
+`ProductVariantsEditor`, `GalleryEditor` (multi-image editor for
+`products.gallery`), and `orders/OrderTimeline` (status timeline +
+internal notes with add-note form).
 
 ## Reuse rules
 

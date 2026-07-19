@@ -41,6 +41,27 @@ export interface Banner {
   ends_at: string | null;
 }
 
+export interface Announcement {
+  id: string;
+  message: string;
+  link_url: string | null;
+  is_active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  sort_order: number;
+}
+
+export interface StaticPage {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_published: boolean;
+  updated_at: string;
+}
+
 export interface Review {
   id: string;
   product_id: string;

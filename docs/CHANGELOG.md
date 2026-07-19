@@ -2,6 +2,15 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Module 2 — DB deltas + admin management
+- Migration 12 (`spec_deltas`): `order_events` table with a trigger that
+  auto-logs every order status transition; `announcements`; `static_pages`;
+  `products.compare_at_price`. Locally harness-tested (trigger + RLS).
+- Admin: Announcements and Static Pages CRUD (list/new/edit + sidebar
+  entries); order detail now shows a status timeline with admin-internal
+  notes (addOrderNote); ProductForm gains a gallery editor
+  (products.gallery) and a compare-at (sale) price field.
+
 ## Module 1 — Docs + design-system retheme
 - Added `/docs` (PRD, ARCHITECTURE, DATABASE, API, ROADMAP, UI_GUIDELINES,
   COMPONENTS, CHANGELOG).

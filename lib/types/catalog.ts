@@ -63,6 +63,7 @@ export interface Product {
   thumbnail_url: string | null;
   gallery: string[];
   base_price: number | null;
+  compare_at_price: number | null;
   has_variants: boolean;
   delivery_type: DeliveryType;
   delivery_instructions: string | null;

@@ -135,6 +135,30 @@ export async function markOrderCompleted(orderId: string): Promise<ActionResult>
   return { ok: true };
 }
 
+export async function addOrderNote(
+  orderId: string,
+  _prevState: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const gate = await requireOrderManager();
+  if (!gate.ok) return gate;
+
+  const note = (formData.get("note")?.toString() ?? "").trim();
+  if (!note) return { ok: false, message: "Write a note first." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("order_events").insert({
+    order_id: orderId,
+    event_type: "note",
+    note,
+    actor_id: gate.admin.userId,
+  });
+  if (error) return { ok: false, message: error.message };
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  return { ok: true };
+}
+
 export async function refundOrder(orderId: string): Promise<ActionResult> {
   const gate = await requireOrderManager();
   if (!gate.ok) return gate;
