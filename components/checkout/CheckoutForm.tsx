@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formatPrice } from "@/components/catalog/ProductCard";
 import { placeOrder } from "@/lib/actions/checkout";
+import { toWebp } from "@/lib/image";
 import { checkoutSchema, type CheckoutFormInput, type CheckoutInput } from "@/lib/validation/checkout";
 import type { PaymentMethod } from "@/lib/types/commerce";
 
@@ -46,11 +47,12 @@ export function CheckoutForm({
   const selectedMethod = paymentMethods.find((m) => m.id === selectedMethodId);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
     setIsUploading(true);
     try {
+      const file = await toWebp(rawFile);
       const formData = new FormData();
       formData.append("file", file);
       const res = await fetch("/api/upload/payment-screenshot", {

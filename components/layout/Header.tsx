@@ -33,7 +33,16 @@ export async function Header() {
   return (
     <header className="border-border/60 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-        <MobileNav categories={categories} games={games} siteName={siteName} />
+        <MobileNav
+          categories={categories}
+          games={games}
+          siteName={siteName}
+          user={
+            user
+              ? { fullName: profile?.full_name ?? null, email: user.email ?? "", isAdmin: profile?.role === "admin" }
+              : null
+          }
+        />
 
         <Link href="/" className="flex shrink-0 items-center gap-2">
           <span className="text-lg font-semibold tracking-tight">

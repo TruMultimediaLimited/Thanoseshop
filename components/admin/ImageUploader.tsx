@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { toWebp } from "@/lib/image";
 import { createClient } from "@/lib/supabase/client";
 
 export function ImageUploader({
@@ -20,11 +21,12 @@ export function ImageUploader({
   const [isUploading, setIsUploading] = useState(false);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
     setIsUploading(true);
     try {
+      const file = await toWebp(rawFile);
       const supabase = createClient();
       const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
       const path = `${folder}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
