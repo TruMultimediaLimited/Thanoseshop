@@ -43,7 +43,7 @@ export default async function AdminOrdersPage({
               "rounded-full border px-3 py-1 text-sm",
               (filter.value === "all" && !activeStatus) || filter.value === activeStatus
                 ? "bg-primary text-primary-foreground border-primary"
-                : "hover:bg-accent",
+                : "hover:bg-secondary",
             )}
           >
             {filter.label}

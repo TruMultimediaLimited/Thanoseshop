@@ -26,7 +26,7 @@ export function AdvancedSection({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="hover:bg-accent flex w-full items-center justify-between rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors"
+        className="hover:bg-secondary flex w-full items-center justify-between rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors"
       >
         {title}
         <ChevronDown className={cn("text-muted-foreground size-4 shrink-0 transition-transform", open && "rotate-180")} />

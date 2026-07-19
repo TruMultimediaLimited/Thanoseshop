@@ -1,0 +1,45 @@
+# Roadmap — Thanos E-Shop
+
+Process rule (owner's execution rules): **one module at a time; each module
+ends with verify → commit/push → owner approval before the next.** Docs are
+updated with every module.
+
+## Done (Phases 0–7 + follow-ups)
+
+Full production build: schema (11 migrations, live), storefront (homepage,
+catalog, product pages, cart/checkout with manual-payment proof), customer
+dashboard + auth, complete admin panel (orders/payment verification + full
+catalog/content CRUD), SEO layer, deployment on Vercel; brand logo, black +
+orange/gold design system, centered-logo header, mobile nav auth state,
+tabbed-form fixes, admin form simplification, WebP upload pipeline.
+
+## Module 1 — Docs pack + design-system retheme ✅ (this module)
+
+`/docs` folder, exact spec palette (#000 / #111 / #181818 / #1F1F1F /
+#FF6A00 / #FFC107 / #22C55E), button/card/input polish, desktop nav row,
+footer social + payment strip, framer-motion FadeIn.
+
+## Module 2 — DB deltas + admin management (awaiting approval)
+
+Migration `00000000000012_spec_deltas.sql`: `order_events` (timeline + notes),
+`announcements`, `static_pages`, `product_images`, `products.compare_at_price`
++ RLS; admin CRUD for each; order detail timeline/notes UI; ProductForm
+gallery + sale price.
+
+## Module 3 — Storefront consumption (awaiting approval)
+
+Announcement top-bar, `/pages/[slug]`, product gallery + sale-price
+strikethrough, ProductCard discount badge.
+
+## Module 4 — Admin analytics (awaiting approval)
+
+Stat cards, revenue/orders charts, recent-orders table on `/admin`.
+
+## Module 5 — Bulk product actions (awaiting approval)
+
+Duplicate product, bulk publish/unpublish/archive, CSV export.
+
+## Deferred (explicit owner decisions)
+
+Brands, Tags, Blog Categories, Email/Notification templates, per-game region
+join, payment gateway, bulk import, referral/affiliate, wallet.

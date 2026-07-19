@@ -11,6 +11,7 @@ import {
   getGames,
   getLatestProducts,
 } from "@/lib/supabase/queries/catalog";
+import { FadeIn } from "@/components/common/FadeIn";
 import { HeroBanner } from "@/components/home/HeroBanner";
 import { CategoryPills } from "@/components/home/CategoryPills";
 import { SearchBarSection } from "@/components/home/SearchBarSection";
@@ -163,7 +164,7 @@ export default async function Home() {
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
       {rendered.map((node, i) => (
         <Fragment key={sections[i].id}>
-          {node && <div>{node}</div>}
+          {node && <FadeIn>{node}</FadeIn>}
           {sections[i].section_type === "hero_banner" && <CategoryPills categories={categories} />}
         </Fragment>
       ))}

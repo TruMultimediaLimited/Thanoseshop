@@ -5,7 +5,11 @@ import { ShoppingCart, User } from "lucide-react";
 import { SearchButton } from "@/components/layout/SearchButton";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { createClient } from "@/lib/supabase/server";
+import { getCategories } from "@/lib/supabase/queries/catalog";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
+
+const NAV_LINK_CLASS =
+  "text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors";
 
 const BOX_BTN =
   "border-border bg-card hover:border-primary hover:text-primary inline-flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors";
@@ -24,10 +28,11 @@ export async function Header() {
   const supabase = await createClient();
   const [
     settings,
+    categories,
     {
       data: { user },
     },
-  ] = await Promise.all([getSiteSettings(), supabase.auth.getUser()]);
+  ] = await Promise.all([getSiteSettings(), getCategories(), supabase.auth.getUser()]);
 
   const profile = user
     ? (
@@ -87,6 +92,26 @@ export async function Header() {
           )}
         </div>
       </div>
+
+      <nav className="border-border/40 hidden h-10 items-center justify-center border-t md:flex">
+        <Link href="/products?type=topup" className={NAV_LINK_CLASS}>
+          Games
+        </Link>
+        <Link href="/gift-cards" className={NAV_LINK_CLASS}>
+          Gift Cards
+        </Link>
+        {categories
+          .filter((c) => !c.parent_id)
+          .slice(0, 4)
+          .map((category) => (
+            <Link key={category.id} href={`/categories/${category.slug}`} className={NAV_LINK_CLASS}>
+              {category.name}
+            </Link>
+          ))}
+        <Link href="/contact" className={NAV_LINK_CLASS}>
+          Contact
+        </Link>
+      </nav>
     </header>
   );
 }

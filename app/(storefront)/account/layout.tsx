@@ -34,7 +34,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
           <Link
             key={item.href}
             href={item.href}
-            className="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
+            className="hover:bg-secondary hover:text-foreground flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
           >
             <item.icon className="size-4" />
             {item.label}
@@ -46,7 +46,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
             <div className="my-2 border-t" />
             <Link
               href="/admin"
-              className="text-primary hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
+              className="text-primary hover:bg-secondary flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
             >
               <ShieldCheck className="size-4" />
               Admin Panel

@@ -1,0 +1,56 @@
+# UI Guidelines — Thanos E-Shop Design System
+
+The visual language comes from the brand logo (black + flame). Inspiration
+only from Codashop/SEAGM-class sites — never copied.
+
+## Color tokens (dark = default; `app/globals.css`)
+
+| Token | Value | Use |
+|---|---|---|
+| `--background` | `#000000` | Page background |
+| `--muted` | `#111111` | Secondary background |
+| `--secondary` / `--popover` | `#181818` | Surface, menus, hover states |
+| `--card` | `#1F1F1F` | Cards |
+| `--primary` | `#FF6A00` | Primary actions, links, focus ring |
+| `--accent` | `#FFC107` | Gold — badges (Best Seller), stars only |
+| `--success` | `#22C55E` | Success states |
+| `--destructive` | `#EF4444` | Errors, destructive actions |
+| `--border` | `white / 8%` | Subtle borders — do not overuse |
+| `--muted-foreground` | `#9CA3AF` | Muted text |
+
+Rule: **gold (`accent`) is decorative** — badges/stars/highlights. Interactive
+hover states use `secondary` (#181818), never gold.
+
+## Components
+
+- **Buttons** (`components/ui/button.tsx`): `default` = orange bg + white
+  text; `secondary` = dark bg + orange border + orange text; `ghost` =
+  transparent, neutral hover. All have `active:scale-[0.98]`.
+- **Cards**: `#1F1F1F`, rounded-xl, soft shadow, subtle border; hover accents
+  via `group-hover:border-primary/50` at call sites.
+- **Inputs**: h-10, rounded-lg, orange focus ring, ≥16px font on mobile.
+- **Icons**: Lucide only (one inline WhatsApp brand SVG in Header/Footer —
+  Lucide has no brand glyphs).
+- **Boxed header buttons**: shared `BOX_BTN` const in
+  `components/layout/Header.tsx` — size-9, rounded-lg, border, `bg-card`.
+
+## Motion
+
+framer-motion, used sparingly (spec: do not over animate):
+- `FadeIn` (`components/common/FadeIn.tsx`) — 0.28s fade+rise, once, used on
+  homepage sections only.
+- Everything else: CSS transitions ≤300ms (colors, transform).
+
+## Layout
+
+- Max content width `max-w-7xl`; page padding `px-4 sm:px-6 lg:px-8`.
+- 8px-friendly spacing: section gaps `gap-12`, card padding p-3/p-6.
+- Header: mobile = Search+WhatsApp | centered 64px logo | Cart+Profile
+  (4 equal boxed buttons). Desktop adds a nav-links row underneath.
+- Typography: Geist Sans; headings `font-semibold tracking-tight`; body
+  `text-sm`/`text-base`; muted secondary text.
+
+## Accessibility
+
+aria-labels on all icon-only buttons, focus-visible rings everywhere
+(`--ring` orange), keyboard-reachable menus (Radix), alt text on images.
