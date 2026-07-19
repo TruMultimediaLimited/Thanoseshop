@@ -21,12 +21,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thanoseshop.vercel.app";
   const supabase = await createClient();
 
-  const [{ data: products }, { data: categories }, { data: games }, { data: posts }] = await Promise.all([
-    supabase.from("products").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
-    supabase.from("categories").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
-    supabase.from("games").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
-    supabase.from("blog_posts").select("slug, updated_at").eq("status", "published").is("deleted_at", null),
-  ]);
+  const [{ data: products }, { data: categories }, { data: games }, { data: posts }, { data: staticPages }] =
+    await Promise.all([
+      supabase.from("products").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
+      supabase.from("categories").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
+      supabase.from("games").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
+      supabase.from("blog_posts").select("slug, updated_at").eq("status", "published").is("deleted_at", null),
+      supabase.from("static_pages").select("slug, updated_at").eq("is_published", true).is("deleted_at", null),
+    ]);
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((path) => ({
     url: `${baseUrl}${path}`,
@@ -56,6 +58,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(posts ?? []).map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       lastModified: post.updated_at,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+    ...(staticPages ?? []).map((page) => ({
+      url: `${baseUrl}/pages/${page.slug}`,
+      lastModified: page.updated_at,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),

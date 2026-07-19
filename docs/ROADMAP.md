@@ -13,13 +13,13 @@ catalog/content CRUD), SEO layer, deployment on Vercel; brand logo, black +
 orange/gold design system, centered-logo header, mobile nav auth state,
 tabbed-form fixes, admin form simplification, WebP upload pipeline.
 
-## Module 1 — Docs pack + design-system retheme ✅ (this module)
+## Module 1 — Docs pack + design-system retheme ✅
 
 `/docs` folder, exact spec palette (#000 / #111 / #181818 / #1F1F1F /
 #FF6A00 / #FFC107 / #22C55E), button/card/input polish, desktop nav row,
 footer social + payment strip, framer-motion FadeIn.
 
-## Module 2 — DB deltas + admin management ✅ (this module)
+## Module 2 — DB deltas + admin management ✅
 
 Migration `00000000000012_spec_deltas.sql`: `order_events` (timeline + notes,
 trigger-logged), `announcements`, `static_pages`, `products.compare_at_price`
@@ -27,10 +27,11 @@ trigger-logged), `announcements`, `static_pages`, `products.compare_at_price`
 CRUD for Announcements + Static Pages; order detail timeline/notes UI;
 ProductForm gallery editor + sale price.
 
-## Module 3 — Storefront consumption (awaiting approval)
+## Module 3 — Storefront consumption ✅ (this module)
 
-Announcement top-bar, `/pages/[slug]`, product gallery + sale-price
-strikethrough, ProductCard discount badge.
+Announcement top-bar above the header, `/pages/[slug]` static page route
+(+ sitemap entries), product page gallery with thumbnail switcher,
+sale-price strikethrough + percent-off badges on product page and cards.
 
 ## Module 4 — Admin analytics (awaiting approval)
 

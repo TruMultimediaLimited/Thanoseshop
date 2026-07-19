@@ -1,3 +1,4 @@
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -20,6 +21,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
           telephone: settings?.contact_phone ?? undefined,
         }}
       />
+      <AnnouncementBar />
       <Header />
       <main className="flex flex-1 flex-col">{children}</main>
       <Footer />

@@ -16,14 +16,27 @@ function formatPrice(amount: number) {
 
 function displayPrice(product: ProductWithRelations) {
   if (product.has_variants) {
-    const prices = product.variants
-      .filter((v) => v.is_published)
-      .map((v) => v.price);
-    if (prices.length === 0) return null;
-    return { label: "From", amount: Math.min(...prices) };
+    const published = product.variants.filter((v) => v.is_published);
+    if (published.length === 0) return null;
+    const cheapest = published.reduce((min, v) => (v.price < min.price ? v : min));
+    return {
+      label: "From",
+      amount: cheapest.price,
+      compareAt:
+        cheapest.compare_at_price != null && cheapest.compare_at_price > cheapest.price
+          ? cheapest.compare_at_price
+          : null,
+    };
   }
   if (product.base_price != null) {
-    return { label: null, amount: product.base_price };
+    return {
+      label: null,
+      amount: product.base_price,
+      compareAt:
+        product.compare_at_price != null && product.compare_at_price > product.base_price
+          ? product.compare_at_price
+          : null,
+    };
   }
   return null;
 }
@@ -56,6 +69,11 @@ export function ProductCard({
           )}
 
           <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+            {price?.compareAt != null && (
+              <Badge className="font-semibold shadow-sm">
+                -{Math.round(((price.compareAt - price.amount) / price.compareAt) * 100)}%
+              </Badge>
+            )}
             {product.is_best_seller && (
               <Badge variant="accent" className="font-semibold shadow-sm">
                 Best Seller
@@ -99,6 +117,11 @@ export function ProductCard({
                 </span>
               )}
               {formatPrice(price.amount)}
+              {price.compareAt != null && (
+                <span className="text-muted-foreground ml-1.5 font-normal line-through">
+                  {formatPrice(price.compareAt)}
+                </span>
+              )}
             </p>
           )}
         </div>

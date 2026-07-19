@@ -2,6 +2,15 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Module 3 — Storefront consumption
+- AnnouncementBar renders the topmost active announcement above the header.
+- `/pages/[slug]` serves admin-managed static pages (with SEO metadata and
+  sitemap entries).
+- Product page: gallery with clickable thumbnail switcher; sale price shows
+  as current price + strikethrough compare-at + percent-off chip (works for
+  both variant and non-variant products).
+- ProductCard: percent-off badge and strikethrough compare-at price.
+
 ## Module 2 — DB deltas + admin management
 - Migration 12 (`spec_deltas`): `order_events` table with a trigger that
   auto-logs every order status transition; `announcements`; `static_pages`;

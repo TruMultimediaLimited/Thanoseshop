@@ -29,8 +29,17 @@ export function ProductDetailClient({
   const [playerId, setPlayerId] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  const images = [product.thumbnail_url, ...(product.gallery ?? [])].filter(
+    (url, index, all): url is string => Boolean(url) && all.indexOf(url) === index,
+  );
+  const [activeImage, setActiveImage] = useState<string | null>(images[0] ?? null);
+
   const selectedVariant = publishedVariants.find((v) => v.id === variantId);
   const price = product.has_variants ? selectedVariant?.price : product.base_price;
+  const compareAt = product.has_variants
+    ? selectedVariant?.compare_at_price
+    : product.compare_at_price;
+  const hasDiscount = price != null && compareAt != null && compareAt > price;
   const canAddToCart =
     (!product.has_variants || Boolean(variantId)) &&
     (!product.requires_player_id || playerId.trim().length > 0);
@@ -54,22 +63,42 @@ export function ProductDetailClient({
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-      <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-2xl">
-        {product.thumbnail_url && (
-          <Image
-            src={product.thumbnail_url}
-            alt={product.name}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-            priority
+      <div className="flex flex-col gap-3">
+        <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-2xl">
+          {activeImage && (
+            <Image
+              src={activeImage}
+              alt={product.name}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          )}
+          <WishlistButton
+            productId={product.id}
+            initialWishlisted={isWishlisted}
+            className="absolute top-3 right-3"
           />
+        </div>
+
+        {images.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {images.map((url) => (
+              <button
+                key={url}
+                type="button"
+                onClick={() => setActiveImage(url)}
+                aria-label="View image"
+                className={`bg-muted relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg border transition-colors ${
+                  activeImage === url ? "border-primary" : "border-border hover:border-primary/50"
+                }`}
+              >
+                <Image src={url} alt="" fill sizes="64px" className="object-cover" />
+              </button>
+            ))}
+          </div>
         )}
-        <WishlistButton
-          productId={product.id}
-          initialWishlisted={isWishlisted}
-          className="absolute top-3 right-3"
-        />
       </div>
 
       <div className="flex flex-col gap-5">
@@ -84,7 +113,19 @@ export function ProductDetailClient({
         </div>
 
         {price != null && (
-          <p className="text-2xl font-semibold">{formatPrice(price)}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-2xl font-semibold">{formatPrice(price)}</p>
+            {hasDiscount && compareAt != null && (
+              <>
+                <p className="text-muted-foreground text-lg line-through">
+                  {formatPrice(compareAt)}
+                </p>
+                <span className="bg-primary text-primary-foreground rounded-md px-1.5 py-0.5 text-xs font-semibold">
+                  -{Math.round(((compareAt - price) / compareAt) * 100)}%
+                </span>
+              </>
+            )}
+          </div>
         )}
 
         {product.has_variants && (

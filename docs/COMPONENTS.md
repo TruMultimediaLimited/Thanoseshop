@@ -10,6 +10,7 @@ remove**), textarea, navigation-menu.
 
 ## `components/layout/`
 
+- `AnnouncementBar` — topmost active announcement above the header (server)
 - `Header` — centered-logo 5-element bar + desktop nav row (server; fetches
   settings/categories/user)
 - `SearchButton` — boxed trigger + full-width drop-down search form (client)
