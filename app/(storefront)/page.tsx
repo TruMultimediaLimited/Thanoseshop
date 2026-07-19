@@ -19,7 +19,13 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { FaqSection } from "@/components/home/FaqSection";
 import { Newsletter } from "@/components/home/Newsletter";
 import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
+import { getPageMetadata } from "@/lib/seo";
 import type { HomepageSection } from "@/lib/types/content";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("home");
+}
 
 function limitOf(section: HomepageSection, fallback = 8) {
   const raw = section.config?.limit;

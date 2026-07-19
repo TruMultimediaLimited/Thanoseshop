@@ -7,6 +7,7 @@ import { getWishlistProducts } from "@/lib/supabase/queries/wishlist";
 
 export const metadata: Metadata = {
   title: "My Wishlist",
+  robots: { index: false, follow: false },
 };
 
 export default async function WishlistPage() {

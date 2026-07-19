@@ -10,6 +10,7 @@ import { getOrdersForCurrentUser } from "@/lib/supabase/queries/orders";
 
 export const metadata: Metadata = {
   title: "My Orders",
+  robots: { index: false, follow: false },
 };
 
 export default async function OrdersPage() {
