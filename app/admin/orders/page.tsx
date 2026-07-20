@@ -9,11 +9,8 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Orders | Admin" };
 
-const STATUS_FILTERS: { label: string; value: OrderStatus | "all" }[] = [
-  { label: "All", value: "all" },
-  { label: ORDER_STATUS_LABEL.payment_review, value: "payment_review" },
-  { label: ORDER_STATUS_LABEL.paid, value: "paid" },
-  { label: ORDER_STATUS_LABEL.processing, value: "processing" },
+// Toggleable: tapping the active one clears it back to "all statuses".
+const STATUS_FILTERS: { label: string; value: OrderStatus }[] = [
   { label: ORDER_STATUS_LABEL.completed, value: "completed" },
   { label: ORDER_STATUS_LABEL.cancelled, value: "cancelled" },
 ];
@@ -21,7 +18,6 @@ const STATUS_FILTERS: { label: string; value: OrderStatus | "all" }[] = [
 // Delivery differs per product type, so the list is split accordingly:
 // top-ups (need in-game delivery) vs gift cards/codes.
 const TYPE_FILTERS = [
-  { label: "All", value: "all" },
   { label: "Game Top-Up", value: "topup" },
   { label: "Gift Cards", value: "giftcard" },
 ] as const;
@@ -37,9 +33,8 @@ function orderType(order: AdminOrderRow): Exclude<OrderTypeFilter, "all"> {
 function filterHref(status: string | undefined, type: OrderTypeFilter) {
   const params = new URLSearchParams();
   if (status) params.set("status", status);
-  if (type !== "all") params.set("type", type);
-  const qs = params.toString();
-  return qs ? `/admin/orders?${qs}` : "/admin/orders";
+  params.set("type", type);
+  return `/admin/orders?${params.toString()}`;
 }
 
 export default async function AdminOrdersPage({
@@ -49,12 +44,10 @@ export default async function AdminOrdersPage({
 }) {
   const { status, type } = await searchParams;
   const activeStatus = (status as OrderStatus | undefined) ?? undefined;
-  const activeType: OrderTypeFilter =
-    type === "topup" || type === "giftcard" ? type : "all";
+  const activeType: OrderTypeFilter = type === "giftcard" ? "giftcard" : "topup";
 
   const orders = (await getAdminOrders(activeStatus)) as unknown as AdminOrderRow[];
-  const visible =
-    activeType === "all" ? orders : orders.filter((o) => orderType(o) === activeType);
+  const visible = orders.filter((o) => orderType(o) === activeType);
 
   return (
     <div className="flex flex-col gap-6">
@@ -82,12 +75,12 @@ export default async function AdminOrdersPage({
             <Link
               key={filter.value}
               href={filterHref(
-                filter.value === "all" ? undefined : filter.value,
+                filter.value === activeStatus ? undefined : filter.value,
                 activeType,
               )}
               className={cn(
                 "rounded-full border px-3 py-1 text-xs",
-                (filter.value === "all" && !activeStatus) || filter.value === activeStatus
+                filter.value === activeStatus
                   ? "bg-secondary border-primary/50 font-medium"
                   : "hover:bg-secondary",
               )}
