@@ -14,10 +14,11 @@ export const checkoutSchema = z.object({
 const TRX_ID_RULES: Partial<
   Record<PaymentMethodType, { length: number; pattern: RegExp; error: string }>
 > = {
+  // The D/E/F/G prefix is enforced but deliberately not mentioned to users.
   bkash: {
     length: 10,
     pattern: /^[DEFG][A-Z0-9]{9}$/i,
-    error: "bKash transaction ID is 10 characters and starts with D, E, F, or G.",
+    error: "Enter a valid 10-character bKash transaction ID.",
   },
   nagad: {
     length: 8,
@@ -32,8 +33,8 @@ export const TRX_ID_LENGTHS: Partial<Record<PaymentMethodType, number>> = {
 };
 
 export const TRX_ID_HINTS: Partial<Record<PaymentMethodType, string>> = {
-  bkash: "10 characters, starts with D, E, F, or G (e.g. D7A2B9C1X4).",
-  nagad: "8 characters (e.g. 74XK2M9P).",
+  bkash: "10 characters.",
+  nagad: "8 characters.",
 };
 
 export function getTransactionIdError(
