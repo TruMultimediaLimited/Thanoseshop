@@ -24,10 +24,8 @@ export default async function StorefrontLayout({ children }: { children: React.R
           telephone: settings?.contact_phone ?? undefined,
         }}
       />
-      <div className="sticky top-0 z-40">
-        <AnnouncementBar />
-        <Header />
-      </div>
+      <AnnouncementBar />
+      <Header />
       <main className="flex flex-1 flex-col">{children}</main>
       <div className="pb-16">
         <Footer />
