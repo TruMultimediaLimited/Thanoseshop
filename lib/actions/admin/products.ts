@@ -55,10 +55,21 @@ function parseForm(formData: FormData) {
   });
 }
 
-function toProductRow(data: ReturnType<typeof productSchema.parse>) {
+function slugify(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function resolveSlug(data: ReturnType<typeof productSchema.parse>) {
+  return data.slug || slugify(data.name) || `product-${Date.now().toString(36)}`;
+}
+
+function toProductRow(data: ReturnType<typeof productSchema.parse>, slug: string) {
   return {
     name: data.name,
-    slug: data.slug,
+    slug,
     product_type: data.productType,
     game_id: data.gameId || null,
     category_id: data.categoryId || null,
@@ -141,14 +152,28 @@ export async function createProduct(_prevState: unknown, formData: FormData): Pr
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
-  const { data: product, error } = await supabase
+  const slug = resolveSlug(parsed.data);
+  let { data: product, error } = await supabase
     .from("products")
-    .insert(toProductRow(parsed.data))
+    .insert(toProductRow(parsed.data, slug))
     .select("id")
     .single();
 
-  if (error) {
-    return { ok: false, message: error.code === "23505" ? "That slug is already in use." : error.message };
+  // An auto-generated slug colliding isn't the admin's fault — retry with a
+  // unique suffix instead of surfacing an error they didn't cause.
+  if (error?.code === "23505" && !parsed.data.slug) {
+    ({ data: product, error } = await supabase
+      .from("products")
+      .insert(toProductRow(parsed.data, `${slug}-${Date.now().toString(36)}`))
+      .select("id")
+      .single());
+  }
+
+  if (error || !product) {
+    return {
+      ok: false,
+      message: error?.code === "23505" ? "That slug is already in use." : (error?.message ?? "Could not create the product."),
+    };
   }
 
   if (parsed.data.hasVariants && parsed.data.variants.length > 0) {
@@ -171,7 +196,8 @@ export async function updateProduct(
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("products").update(toProductRow(parsed.data)).eq("id", id);
+  const slug = resolveSlug(parsed.data);
+  const { error } = await supabase.from("products").update(toProductRow(parsed.data, slug)).eq("id", id);
 
   if (error) {
     return { ok: false, message: error.code === "23505" ? "That slug is already in use." : error.message };
@@ -180,7 +206,7 @@ export async function updateProduct(
   await syncVariants(supabase, id, parsed.data.hasVariants ? parsed.data.variants : []);
 
   revalidatePath("/admin/products");
-  revalidatePath(`/products/${parsed.data.slug}`);
+  revalidatePath(`/products/${slug}`);
   redirect("/admin/products");
 }
 

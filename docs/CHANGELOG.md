@@ -2,6 +2,18 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Simple product form (owner's reference)
+- Admin product form stripped to the essentials: Name, Product Type
+  (+ Game for top-ups), Thumbnail, package list, Requires Player ID,
+  Published. Everything else (slug, category/region, descriptions,
+  delivery, gallery, flags, SEO) moved into the Advanced section.
+- Package editor rebuilt to match the owner's reference: per-package
+  Title / Stock dropdown (Stock Available ↔ Out of Stock) / Previous
+  Price / Current Price rows with an "Add Package" button. New products
+  default to the package list.
+- Slug is now optional — left blank, it is auto-generated from the name
+  (with a unique-suffix retry if the generated slug collides).
+
 ## Polish 3: deep navy background (owner's reference pick)
 - Page background switched to deep navy #10141F (from the rmtgameshop
   reference the owner chose) with near-white text; cards and menus stay

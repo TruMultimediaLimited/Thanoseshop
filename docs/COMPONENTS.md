@@ -50,7 +50,9 @@ keeps fields mounted — use this, not Radix Accordion, inside forms**),
 charts on the dashboard), form components per resource under
 `products/ games/ categories/ regions/ coupons/ banners/ faqs/ blog/
 homepage/ payments/ settings/ announcements/ static-pages/`, plus
-`ProductVariantsEditor`, `products/ProductsTable` (client table with bulk
+`ProductVariantsEditor` (reference-style package rows: Title / Stock
+dropdown (Available ↔ Out of Stock) / Previous Price / Current Price),
+`products/ProductsTable` (client table with bulk
 select/publish/archive/duplicate + CSV export), `GalleryEditor` (multi-image editor for
 `products.gallery`), and `orders/OrderTimeline` (status timeline +
 internal notes with add-note form).

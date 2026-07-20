@@ -15,11 +15,13 @@ export type ProductVariantInput = z.infer<typeof productVariantSchema>;
 export const productSchema = z
   .object({
     name: z.string().trim().min(2, "Enter a name."),
+    // Optional: blank means "auto-generate from the name" server-side.
     slug: z
       .string()
       .trim()
-      .min(2, "Enter a slug.")
-      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only."),
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only.")
+      .optional()
+      .or(z.literal("")),
     productType: z.enum(["topup", "giftcard", "subscription", "account"]),
     gameId: z.string().uuid().optional().or(z.literal("")),
     categoryId: z.string().uuid().optional().or(z.literal("")),
