@@ -14,7 +14,8 @@ remove**), textarea, navigation-menu.
 - `Header` — centered logo in a black pill (server; site settings only)
 - `BottomNav` — fixed bottom tab bar (Home/FAQ/Cart/Profile), all viewports
 - `WhatsAppFloat` — floating WhatsApp action button above the bottom bar
-- `Footer` — link columns, social icons, dynamic payment-method badges
+- `Footer` — minimal: site name + tagline, About/Terms/Refund links,
+  social icons, copyright (site settings only, no payment-method fetch)
 
 ## `components/home/`
 

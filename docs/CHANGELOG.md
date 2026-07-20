@@ -2,6 +2,14 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Minimal footer
+- Footer slimmed to: site name + tagline, three links (About Us, Terms &
+  Conditions, Refund Policy), social icons, copyright. The Shop/Support
+  link columns, Blog/Privacy links, and the "We accept" payment strip
+  are gone — homepage covers products, the bottom nav covers FAQ, and
+  the WhatsApp float covers contact. One fewer query per page (payment
+  methods no longer fetched).
+
 ## Uniform compact tiles + image-free purchase page
 - Every homepage box is now the exact same size (the PUBG/Free Fire
   size): fixed-height name panel with 2-line clamp, so long names
