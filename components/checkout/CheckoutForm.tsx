@@ -1,0 +1,165 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { formatPrice } from "@/components/catalog/ProductCard";
+import { placeOrder } from "@/lib/actions/checkout";
+import {
+  checkoutSchema,
+  getTransactionIdError,
+  TRX_ID_HINTS,
+  TRX_ID_LENGTHS,
+  type CheckoutFormInput,
+  type CheckoutInput,
+} from "@/lib/validation/checkout";
+import type { PaymentMethod } from "@/lib/types/commerce";
+
+export function CheckoutForm({
+  paymentMethods,
+  total,
+}: {
+  paymentMethods: PaymentMethod[];
+  total: number;
+}) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<CheckoutFormInput, unknown, CheckoutInput>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: {
+      paymentMethodId: paymentMethods[0]?.id ?? "",
+      amountClaimed: total,
+    },
+  });
+
+  const selectedMethodId = watch("paymentMethodId");
+  const selectedMethod = paymentMethods.find((m) => m.id === selectedMethodId);
+  const trxLength = selectedMethod ? TRX_ID_LENGTHS[selectedMethod.type] : undefined;
+
+  function onSubmit(values: CheckoutInput) {
+    const trxError = getTransactionIdError(selectedMethod?.type, values.transactionId);
+    if (trxError) {
+      setError("transactionId", { message: trxError });
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await placeOrder(values);
+
+      if (!result.ok) {
+        if (result.requiresAuth) {
+          router.push("/login?redirect=/checkout");
+          return;
+        }
+        toast.error(result.message ?? "Could not place order");
+        return;
+      }
+
+      toast.success("Order placed! We'll verify your payment shortly.");
+      router.push(`/account/orders/${result.orderId}`);
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      <div>
+        <Label className="mb-3">Payment Method</Label>
+        <RadioGroup
+          value={selectedMethodId}
+          onValueChange={(value) => setValue("paymentMethodId", value, { shouldValidate: true })}
+        >
+          {paymentMethods.map((method) => (
+            <Label
+              key={method.id}
+              htmlFor={method.id}
+              className="hover:border-primary/50 flex cursor-pointer items-center gap-3 rounded-lg border p-3"
+            >
+              <RadioGroupItem value={method.id} id={method.id} />
+              <span className="font-medium">{method.name}</span>
+            </Label>
+          ))}
+        </RadioGroup>
+        {errors.paymentMethodId && (
+          <p className="text-destructive mt-1 text-xs">{errors.paymentMethodId.message}</p>
+        )}
+      </div>
+
+      {selectedMethod && (
+        <div className="bg-muted rounded-lg p-4 text-sm">
+          {selectedMethod.account_number && (
+            <p>
+              Send payment to: <span className="font-semibold">{selectedMethod.account_number}</span>
+            </p>
+          )}
+          {selectedMethod.account_name && <p>Account name: {selectedMethod.account_name}</p>}
+          {selectedMethod.bank_name && <p>Bank: {selectedMethod.bank_name}</p>}
+          {selectedMethod.instructions && (
+            <p className="text-muted-foreground mt-1">{selectedMethod.instructions}</p>
+          )}
+          <p className="mt-2 font-medium">Amount to pay: {formatPrice(total)}</p>
+        </div>
+      )}
+
+      <div>
+        <Label htmlFor="transactionId" className="mb-2">
+          Transaction ID
+        </Label>
+        <Input
+          id="transactionId"
+          {...register("transactionId")}
+          maxLength={trxLength}
+          placeholder={trxLength ? "•".repeat(trxLength) : "e.g. 8N7K2L9P"}
+        />
+        {selectedMethod && TRX_ID_HINTS[selectedMethod.type] && !errors.transactionId && (
+          <p className="text-muted-foreground mt-1 text-xs">
+            {selectedMethod.name} transaction ID: {TRX_ID_HINTS[selectedMethod.type]}
+          </p>
+        )}
+        {errors.transactionId && (
+          <p className="text-destructive mt-1 text-xs">{errors.transactionId.message}</p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="amountClaimed" className="mb-2">
+          Amount Paid
+        </Label>
+        <Input
+          id="amountClaimed"
+          type="number"
+          step="0.01"
+          {...register("amountClaimed")}
+        />
+        {errors.amountClaimed && (
+          <p className="text-destructive mt-1 text-xs">{errors.amountClaimed.message}</p>
+        )}
+      </div>
+
+      <div>
+        <Label htmlFor="couponCode" className="mb-2">
+          Coupon Code (optional)
+        </Label>
+        <Input id="couponCode" {...register("couponCode")} placeholder="e.g. WELCOME10" />
+      </div>
+
+      <Button type="submit" size="lg" disabled={isPending}>
+        {isPending ? "Placing order…" : "Place Order"}
+      </Button>
+    </form>
+  );
+}
