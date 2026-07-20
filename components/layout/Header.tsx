@@ -15,8 +15,8 @@ export async function Header() {
         <Image
           src="/cover.webp"
           alt={siteName}
-          width={1920}
-          height={731}
+          width={2112}
+          height={585}
           sizes="100vw"
           className="h-auto w-full"
           priority
