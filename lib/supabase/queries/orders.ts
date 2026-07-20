@@ -5,7 +5,7 @@ import type { OrderWithItems } from "@/lib/types/commerce";
 
 const ORDER_SELECT = `
   *,
-  items:order_items ( * ),
+  items:order_items ( *, product:products ( product_type ) ),
   payment_method:payment_methods ( id, name, type )
 `;
 

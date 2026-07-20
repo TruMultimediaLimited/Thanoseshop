@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/common/StatusBadge";
 import { Card } from "@/components/ui/card";
 import { formatPrice } from "@/components/catalog/ProductCard";
 import { getOrderById } from "@/lib/supabase/queries/orders";
+import { getSiteSettings } from "@/lib/supabase/queries/settings";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -29,6 +30,17 @@ export default async function OrderDetailPage({
   const order = await getOrderById(id);
   if (!order || order.user_id !== user.id) notFound();
 
+  const hasGiftCard = order.items.some(
+    (item) =>
+      item.product?.product_type === "giftcard" ||
+      item.product?.product_type === "subscription",
+  );
+  const settings = hasGiftCard ? await getSiteSettings() : null;
+  const whatsappDigits =
+    (settings?.whatsapp_number ?? "+8801833534123").replace(/\D/g, "");
+  const showGiftCardNotice =
+    hasGiftCard && order.status !== "completed" && order.status !== "cancelled";
+
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
@@ -40,6 +52,29 @@ export default async function OrderDetailPage({
         </div>
         <StatusBadge status={order.status} />
       </div>
+
+      {showGiftCardNotice && (
+        <Card className="border-primary/40 gap-2 p-4">
+          <p className="text-sm font-semibold">
+            Gift card orders: message us on WhatsApp
+          </p>
+          <p className="text-muted-foreground text-sm">
+            After placing a gift card order, you must message us on WhatsApp with
+            your order number so we can confirm and deliver it. If you don&apos;t
+            use WhatsApp, message us on Facebook instead.
+          </p>
+          <a
+            href={`https://wa.me/${whatsappDigits}?text=${encodeURIComponent(
+              `Order ${order.order_number}`,
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+          >
+            Message on WhatsApp
+          </a>
+        </Card>
+      )}
 
       <Card className="gap-0 divide-y p-0">
         {order.items.map((item) => (

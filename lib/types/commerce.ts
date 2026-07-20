@@ -79,6 +79,8 @@ export interface OrderItem {
   player_id_note: string | null;
   delivered_payload: string | null;
   delivered_at: string | null;
+  /** Joined on customer order reads to detect gift-card orders. */
+  product?: { product_type: string } | null;
 }
 
 export interface Order {

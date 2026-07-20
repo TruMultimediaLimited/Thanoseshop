@@ -2,6 +2,16 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## PUBG player fields + gift-card WhatsApp rule
+- PUBG products now require both the in-game ID Name and ID Number
+  (stored together in the existing player_id_note as
+  "Name · UID: 12345"); other games keep the single Player ID field
+  until their requirements are specified.
+- Gift-card (and subscription) orders show a mandatory notice on the
+  order page: message us on WhatsApp with the order number (one-tap
+  button with the order number pre-filled; Facebook alternative
+  mentioned, link to be added later).
+
 ## Transaction-ID-only checkout
 - Payment screenshot removed from checkout — not everyone can provide
   one. The transaction ID alone is submitted for manual verification.

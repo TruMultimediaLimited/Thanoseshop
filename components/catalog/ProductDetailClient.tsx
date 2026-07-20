@@ -28,7 +28,14 @@ export function ProductDetailClient({
   );
   const [quantity, setQuantity] = useState(1);
   const [playerId, setPlayerId] = useState("");
+  const [playerName, setPlayerName] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  // PUBG orders need both the in-game ID name and the numeric ID; other
+  // games' requirements are still being specified by the owner.
+  const needsPubgFields =
+    product.requires_player_id &&
+    /pubg/i.test(`${product.game?.name ?? ""} ${product.name}`);
 
   const selectedVariant = publishedVariants.find((v) => v.id === variantId);
   const price = product.has_variants ? selectedVariant?.price : product.base_price;
@@ -38,7 +45,8 @@ export function ProductDetailClient({
   const hasDiscount = price != null && compareAt != null && compareAt > price;
   const canAddToCart =
     (!product.has_variants || Boolean(variantId)) &&
-    (!product.requires_player_id || playerId.trim().length > 0);
+    (!product.requires_player_id || playerId.trim().length > 0) &&
+    (!needsPubgFields || playerName.trim().length > 0);
 
   function handleAddToCart() {
     startTransition(async () => {
@@ -46,7 +54,11 @@ export function ProductDetailClient({
         productId: product.id,
         variantId: product.has_variants ? variantId : null,
         quantity,
-        playerIdNote: product.requires_player_id ? playerId.trim() : null,
+        playerIdNote: product.requires_player_id
+          ? needsPubgFields
+            ? `${playerName.trim()} · UID: ${playerId.trim()}`
+            : playerId.trim()
+          : null,
       });
 
       if (result.ok) {
@@ -104,21 +116,43 @@ export function ProductDetailClient({
       )}
 
       {product.requires_player_id && (
-        <div>
-          <Label htmlFor="player-id" className="mb-2">
-            Player ID / UID
-          </Label>
-          <Input
-            id="player-id"
-            value={playerId}
-            onChange={(e) => setPlayerId(e.target.value)}
-            placeholder="Enter your in-game Player ID"
-          />
-          {product.delivery_instructions && (
-            <p className="text-muted-foreground mt-1.5 text-xs">
-              {product.delivery_instructions}
-            </p>
+        <div className="flex flex-col gap-3">
+          {needsPubgFields && (
+            <div>
+              <Label htmlFor="player-name" className="mb-2">
+                PUBG ID Name <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="player-name"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                placeholder="Your in-game name"
+              />
+            </div>
           )}
+          <div>
+            <Label htmlFor="player-id" className="mb-2">
+              {needsPubgFields ? (
+                <>
+                  PUBG ID Number <span className="text-destructive">*</span>
+                </>
+              ) : (
+                "Player ID / UID"
+              )}
+            </Label>
+            <Input
+              id="player-id"
+              value={playerId}
+              onChange={(e) => setPlayerId(e.target.value)}
+              inputMode={needsPubgFields ? "numeric" : undefined}
+              placeholder={needsPubgFields ? "e.g. 5123456789" : "Enter your in-game Player ID"}
+            />
+            {product.delivery_instructions && (
+              <p className="text-muted-foreground mt-1.5 text-xs">
+                {product.delivery_instructions}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
