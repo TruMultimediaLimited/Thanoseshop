@@ -1,11 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,8 +12,13 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formatPrice } from "@/components/catalog/ProductCard";
 import { placeOrder } from "@/lib/actions/checkout";
-import { toWebp } from "@/lib/image";
-import { checkoutSchema, type CheckoutFormInput, type CheckoutInput } from "@/lib/validation/checkout";
+import {
+  checkoutSchema,
+  getTransactionIdError,
+  TRX_ID_LENGTHS,
+  type CheckoutFormInput,
+  type CheckoutInput,
+} from "@/lib/validation/checkout";
 import type { PaymentMethod } from "@/lib/types/commerce";
 
 export function CheckoutForm({
@@ -26,14 +30,13 @@ export function CheckoutForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [isUploading, setIsUploading] = useState(false);
-  const [screenshotName, setScreenshotName] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<CheckoutFormInput, unknown, CheckoutInput>({
     resolver: zodResolver(checkoutSchema),
@@ -45,35 +48,15 @@ export function CheckoutForm({
 
   const selectedMethodId = watch("paymentMethodId");
   const selectedMethod = paymentMethods.find((m) => m.id === selectedMethodId);
-
-  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const rawFile = e.target.files?.[0];
-    if (!rawFile) return;
-
-    setIsUploading(true);
-    try {
-      const file = await toWebp(rawFile);
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch("/api/upload/payment-screenshot", {
-        method: "POST",
-        body: formData,
-      });
-      const body = await res.json();
-
-      if (!res.ok) {
-        toast.error(body.error ?? "Upload failed");
-        return;
-      }
-
-      setValue("screenshotPath", body.path, { shouldValidate: true });
-      setScreenshotName(file.name);
-    } finally {
-      setIsUploading(false);
-    }
-  }
+  const trxLength = selectedMethod ? TRX_ID_LENGTHS[selectedMethod.type] : undefined;
 
   function onSubmit(values: CheckoutInput) {
+    const trxError = getTransactionIdError(selectedMethod?.type, values.transactionId);
+    if (trxError) {
+      setError("transactionId", { message: trxError });
+      return;
+    }
+
     startTransition(async () => {
       const result = await placeOrder(values);
 
@@ -135,7 +118,17 @@ export function CheckoutForm({
         <Label htmlFor="transactionId" className="mb-2">
           Transaction ID
         </Label>
-        <Input id="transactionId" {...register("transactionId")} placeholder="e.g. 8N7K2L9P" />
+        <Input
+          id="transactionId"
+          {...register("transactionId")}
+          maxLength={trxLength}
+          placeholder={trxLength ? "•".repeat(trxLength) : "e.g. 8N7K2L9P"}
+        />
+        {trxLength && !errors.transactionId && (
+          <p className="text-muted-foreground mt-1 text-xs">
+            {selectedMethod?.name} transaction ID is {trxLength} characters.
+          </p>
+        )}
         {errors.transactionId && (
           <p className="text-destructive mt-1 text-xs">{errors.transactionId.message}</p>
         )}
@@ -157,38 +150,13 @@ export function CheckoutForm({
       </div>
 
       <div>
-        <Label htmlFor="screenshot" className="mb-2">
-          Payment Screenshot
-        </Label>
-        <label
-          htmlFor="screenshot"
-          className="hover:border-primary/50 flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed p-6 text-center"
-        >
-          <Upload className="text-muted-foreground size-6" />
-          <span className="text-muted-foreground text-sm">
-            {isUploading ? "Uploading…" : screenshotName ?? "Click to upload a screenshot"}
-          </span>
-          <input
-            id="screenshot"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </label>
-        {errors.screenshotPath && (
-          <p className="text-destructive mt-1 text-xs">{errors.screenshotPath.message}</p>
-        )}
-      </div>
-
-      <div>
         <Label htmlFor="couponCode" className="mb-2">
           Coupon Code (optional)
         </Label>
         <Input id="couponCode" {...register("couponCode")} placeholder="e.g. WELCOME10" />
       </div>
 
-      <Button type="submit" size="lg" disabled={isPending || isUploading}>
+      <Button type="submit" size="lg" disabled={isPending}>
         {isPending ? "Placing order…" : "Place Order"}
       </Button>
     </form>

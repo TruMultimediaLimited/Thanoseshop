@@ -20,6 +20,7 @@ index coverage per relationship. RLS enabled on every table.
 | 09_rls | All RLS policies (admin vs owner vs public) |
 | 10_storage | Buckets: `public-assets` (public read/admin write), `payment-screenshots` (private, `{user_id}/...` paths) |
 | 11_newsletter | `newsletter_subscribers` |
+| 13_optional_screenshot | `payment_submissions.screenshot_path` nullable — checkout collects transaction ID only |
 
 ## Key modelling decisions
 

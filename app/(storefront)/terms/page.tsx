@@ -11,8 +11,8 @@ export default function TermsPage() {
           <h2 className="text-foreground mb-1 font-medium">1. Orders & Payment</h2>
           <p>
             All orders are paid manually via the payment methods listed at checkout. After
-            submitting your transaction ID and payment screenshot, your order enters payment
-            review. Orders are only fulfilled once payment has been verified by our team.
+            submitting your transaction ID, your order enters payment review. Orders are
+            only fulfilled once payment has been verified by our team.
           </p>
         </section>
         <section>

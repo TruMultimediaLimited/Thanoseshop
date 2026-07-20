@@ -11,16 +11,16 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-foreground mb-1 font-medium">Information We Collect</h2>
           <p>
             We collect the information you provide when creating an account (name, email, phone)
-            and when placing an order (payment method, transaction ID, payment screenshot,
-            in-game Player ID where applicable).
+            and when placing an order (payment method, transaction ID, in-game Player ID
+            where applicable).
           </p>
         </section>
         <section>
           <h2 className="text-foreground mb-1 font-medium">How We Use It</h2>
           <p>
             Your information is used to process and verify orders, deliver digital products,
-            provide customer support, and improve our service. Payment screenshots are stored
-            securely and only accessible to you and our admin team for verification purposes.
+            provide customer support, and improve our service. Payment details are only
+            accessible to you and our admin team for verification purposes.
           </p>
         </section>
         <section>

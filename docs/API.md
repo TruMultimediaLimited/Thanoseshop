@@ -8,8 +8,11 @@ helpers (`lib/supabase/queries/**`) guarded by RLS.
 
 | Route | Method | Purpose |
 |---|---|---|
-| `/api/upload/payment-screenshot` | POST | Authenticated multipart upload → private `payment-screenshots` bucket. Validates type (jpeg/png/webp) + size (≤5MB). Returns `{ path }`. |
 | `/auth/callback` | GET | Supabase email-confirmation code exchange, then redirect. |
+
+(The former `/api/upload/payment-screenshot` route was removed — checkout
+collects only a transaction ID, validated per method: bKash 10 chars,
+Nagad 8.)
 
 ## Postgres RPCs
 

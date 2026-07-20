@@ -2,6 +2,18 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Transaction-ID-only checkout
+- Payment screenshot removed from checkout — not everyone can provide
+  one. The transaction ID alone is submitted for manual verification.
+- Per-method transaction ID validation, client and server: bKash = 10
+  characters, Nagad = 8 (alphanumeric). The field shows the expected
+  length and caps input at it.
+- Migration 13 makes `payment_submissions.screenshot_path` nullable;
+  the `/api/upload/payment-screenshot` route is deleted. Admin order
+  view already handled orders without a screenshot.
+- Rocket and Bank Transfer are turned off as data (`is_active=false`),
+  not code — re-enable anytime in Admin → Payment Methods.
+
 ## Minimal footer
 - Footer slimmed to: site name + tagline, three links (About Us, Terms &
   Conditions, Refund Policy), social icons, copyright. The Shop/Support
