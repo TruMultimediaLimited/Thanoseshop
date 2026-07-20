@@ -14,6 +14,7 @@ remove**), textarea, navigation-menu.
 - `Header` — 3-element bar: search / centered logo / WhatsApp (server;
   fetches site settings only)
 - `BottomNav` — fixed bottom tab bar (Home/FAQ/Cart/Profile), all viewports
+- `WhatsAppFloat` — floating WhatsApp action button above the bottom bar
 - `SearchButton` — boxed trigger + full-width drop-down search form (client)
 - `Footer` — link columns, social icons, dynamic payment-method badges
 
@@ -43,7 +44,8 @@ coupon), `CartItemRow`.
 
 ## `components/admin/`
 
-`AdminSidebar` (role-filtered nav), `ImageUploader` (WebP conversion,
+`AdminSidebar`/`AdminNavLinks` (flat 12-item role-filtered nav, desktop
+aside), `AdminMobileNav` (drawer version for mobile), `ImageUploader` (WebP conversion,
 click-to-replace), `AdvancedSection` (**plain CSS-toggle collapsible that
 keeps fields mounted — use this, not Radix Accordion, inside forms**),
 `MediaUploadCard`, `analytics/DashboardCharts` (recharts revenue/orders

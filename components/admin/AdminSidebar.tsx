@@ -3,131 +3,97 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  Package,
-  Gamepad2,
-  Gift,
-  FolderTree,
-  Globe,
-  Users,
-  Ticket,
-  Star,
-  HelpCircle,
-  Newspaper,
-  Image as ImageIcon,
-  ImagePlay,
   CreditCard,
-  Search,
-  Settings,
-  Bell,
-  ScrollText,
-  ShieldCheck,
+  Gamepad2,
+  HelpCircle,
+  LayoutDashboard,
   Megaphone,
-  FileText,
+  Package,
+  PlusCircle,
+  Settings,
+  ShieldCheck,
+  ShoppingCart,
+  Star,
+  User,
+  Users,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { canAccess, type AdminRole } from "@/lib/types/admin";
 
+/**
+ * Deliberately a short, flat list — the owner's request. Less-used sections
+ * (coupons, categories, regions, blog, media, homepage manager, SEO, logs,
+ * static pages, gift-card view) keep their routes and still work by URL;
+ * they are just not in the menu.
+ */
 const NAV = [
-  {
-    group: "Overview",
-    items: [{ href: "/admin", label: "Dashboard", icon: LayoutDashboard, roles: null }],
-  },
-  {
-    group: "Sales",
-    items: [
-      { href: "/admin/orders", label: "Orders", icon: ShoppingCart, roles: ["order_manager"] },
-      { href: "/admin/coupons", label: "Coupons", icon: Ticket, roles: ["order_manager", "product_manager"] },
-      { href: "/admin/reviews", label: "Reviews", icon: Star, roles: ["product_manager", "support"] },
-    ],
-  },
-  {
-    group: "Catalog",
-    items: [
-      { href: "/admin/products", label: "Products", icon: Package, roles: ["product_manager"] },
-      { href: "/admin/games", label: "Games", icon: Gamepad2, roles: ["product_manager"] },
-      { href: "/admin/categories", label: "Categories", icon: FolderTree, roles: ["product_manager"] },
-      { href: "/admin/regions", label: "Regions", icon: Globe, roles: ["product_manager"] },
-      { href: "/admin/gift-cards", label: "Gift Cards", icon: Gift, roles: ["product_manager"] },
-    ],
-  },
-  {
-    group: "Content",
-    items: [
-      { href: "/admin/homepage", label: "Homepage Manager", icon: LayoutDashboard, roles: ["product_manager"] },
-      { href: "/admin/banners", label: "Banner Manager", icon: ImagePlay, roles: ["product_manager"] },
-      { href: "/admin/announcements", label: "Announcements", icon: Megaphone, roles: ["product_manager"] },
-      { href: "/admin/static-pages", label: "Static Pages", icon: FileText, roles: ["product_manager"] },
-      { href: "/admin/faqs", label: "FAQs", icon: HelpCircle, roles: ["product_manager"] },
-      { href: "/admin/blog", label: "Blog", icon: Newspaper, roles: ["product_manager"] },
-      { href: "/admin/media", label: "Media Library", icon: ImageIcon, roles: ["product_manager"] },
-    ],
-  },
-  {
-    group: "People",
-    items: [{ href: "/admin/users", label: "Customers & Admins", icon: Users, roles: [] }],
-  },
-  {
-    group: "System",
-    items: [
-      { href: "/admin/payments", label: "Payment Methods", icon: CreditCard, roles: [] },
-      { href: "/admin/seo", label: "SEO Manager", icon: Search, roles: [] },
-      { href: "/admin/settings", label: "Website Settings", icon: Settings, roles: [] },
-      { href: "/admin/notifications", label: "Notifications", icon: Bell, roles: null },
-      { href: "/admin/activity-logs", label: "Activity Logs", icon: ScrollText, roles: [] },
-    ],
-  },
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, roles: null, exact: true },
+  { href: "/admin/orders", label: "Order List", icon: ShoppingCart, roles: ["order_manager"] },
+  { href: "/admin/products/new", label: "Add New Product", icon: PlusCircle, roles: ["product_manager"], exact: true },
+  { href: "/admin/products", label: "Manage Products", icon: Package, roles: ["product_manager"] },
+  { href: "/admin/games", label: "Manage Games", icon: Gamepad2, roles: ["product_manager"] },
+  { href: "/admin/announcements", label: "Manage Notice", icon: Megaphone, roles: ["product_manager"] },
+  { href: "/admin/faqs", label: "Manage FAQ", icon: HelpCircle, roles: ["product_manager"] },
+  { href: "/admin/reviews", label: "Manage Reviews", icon: Star, roles: ["product_manager", "support"] },
+  { href: "/admin/users", label: "Manage Users", icon: Users, roles: [] },
+  { href: "/admin/payments", label: "Payment Methods", icon: CreditCard, roles: [] },
+  { href: "/admin/settings", label: "Site Settings", icon: Settings, roles: [] },
+  { href: "/account", label: "My Profile", icon: User, roles: null },
 ] satisfies {
-  group: string;
-  items: { href: string; label: string; icon: React.ElementType; roles: AdminRole[] | null }[];
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  roles: AdminRole[] | null;
+  exact?: boolean;
 }[];
 
-export function AdminSidebar({ adminRole }: { adminRole: AdminRole | null }) {
+export function AdminNavLinks({
+  adminRole,
+  onNavigate,
+}: {
+  adminRole: AdminRole | null;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col gap-6 border-r px-3 py-6">
+    <div className="flex flex-col gap-0.5">
+      {NAV.filter((item) => item.roles === null || canAccess(adminRole, item.roles)).map((item) => {
+        const active =
+          "exact" in item && item.exact
+            ? pathname === item.href
+            : (pathname === item.href || pathname.startsWith(`${item.href}/`)) &&
+              !(item.href === "/admin/products" && pathname.startsWith("/admin/products/new"));
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={onNavigate}
+            className={cn(
+              "flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
+              active
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+            )}
+          >
+            <item.icon className="size-4" />
+            {item.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+export function AdminSidebar({ adminRole }: { adminRole: AdminRole | null }) {
+  return (
+    <aside className="hidden w-60 shrink-0 flex-col gap-4 border-r px-3 py-6 lg:flex">
       <div className="flex items-center gap-2 px-3">
         <ShieldCheck className="text-primary size-5" />
         <span className="font-semibold">Admin Panel</span>
       </div>
-
-      {NAV.map((group) => {
-        const items = group.items.filter(
-          (item) => item.roles === null || canAccess(adminRole, item.roles),
-        );
-        if (items.length === 0) return null;
-
-        return (
-          <div key={group.group}>
-            <p className="text-muted-foreground px-3 text-xs font-semibold tracking-wide uppercase">
-              {group.group}
-            </p>
-            <div className="mt-1 flex flex-col gap-0.5">
-              {items.map((item) => {
-                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                      active
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
-                    )}
-                  >
-                    <item.icon className="size-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
+      <AdminNavLinks adminRole={adminRole} />
     </aside>
   );
 }

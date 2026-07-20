@@ -1,22 +1,26 @@
 # UI Guidelines — Thanos E-Shop Design System
 
-The visual language comes from the brand logo (black + flame). Inspiration
-only from Codashop/SEAGM-class sites — never copied.
+The visual language pairs the flame-orange brand with a soft light theme
+(owner decision: pure black hurt their eyes). Inspiration only from
+Codashop/SEAGM-class sites — never copied.
 
-## Color tokens (dark = default; `app/globals.css`)
+## Color tokens (light = active theme; `app/globals.css`)
 
 | Token | Value | Use |
 |---|---|---|
-| `--background` | `#000000` | Page background |
-| `--muted` | `#111111` | Secondary background |
-| `--secondary` / `--popover` | `#181818` | Surface, menus, hover states |
-| `--card` | `#1F1F1F` | Cards |
-| `--primary` | `#FF6A00` | Primary actions, links, focus ring |
-| `--accent` | `#FFC107` | Gold — badges (Best Seller), stars only |
-| `--success` | `#22C55E` | Success states |
-| `--destructive` | `#EF4444` | Errors, destructive actions |
-| `--border` | `white / 8%` | Subtle borders — do not overuse |
-| `--muted-foreground` | `#9CA3AF` | Muted text |
+| `--background` | `#F6F6F7` | Soft near-white page background |
+| `--foreground` | `#1C1C1E` | Soft black text (never pure #000) |
+| `--card` | `#FFFFFF` | Cards, header, bottom bar |
+| `--secondary` / `--muted` | `#EFEFF1` | Surfaces, hover states |
+| `--primary` | `#E85D00` | Primary actions, links, focus ring |
+| `--accent` | `#D69E00` | Gold — badges (Best Seller), stars only |
+| `--success` | `#16A34A` | Success states |
+| `--destructive` | `#DC2626` | Errors, destructive actions |
+| `--border` | `black / 8%` | Subtle borders — do not overuse |
+| `--muted-foreground` | `#6B7280` | Muted text |
+
+A `.dark` palette remains defined but the `dark` class is no longer set on
+`<html>` — the site ships light-only.
 
 Rule: **gold (`accent`) is decorative** — badges/stars/highlights. Interactive
 hover states use `secondary` (#181818), never gold.

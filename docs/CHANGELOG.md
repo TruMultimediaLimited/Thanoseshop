@@ -2,6 +2,20 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Light theme + floating WhatsApp + simplified admin nav
+- Whole site (storefront + admin) switched to a soft light theme: #F6F6F7
+  background, white cards, soft-black text, orange primary. `dark` class
+  removed from <html>; card shadows softened; prose-invert dropped.
+- WhatsApp moved out of the header into a floating green action button
+  above the bottom bar (owner's reference). Header is now search + logo.
+- Header and bottom nav restyled as light boxed bars (white card surface
+  with subtle border + shadow separation).
+- Admin nav simplified to the owner's reference list — a flat 12-item menu
+  (Dashboard, Order List, Add New Product, Manage Products/Games/Notice/
+  FAQ/Reviews/Users, Payment Methods, Site Settings, My Profile); hidden
+  sections keep working by URL. Sidebar hidden on mobile behind a drawer,
+  fixing the congested mobile admin layout.
+
 ## Storefront v2 — simple skin
 - Header slimmed to search / centered logo / WhatsApp (one settings query,
   no auth/categories fetches); sticky together with the announcement bar.

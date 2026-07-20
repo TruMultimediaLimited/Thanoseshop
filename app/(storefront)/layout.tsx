@@ -2,6 +2,7 @@ import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
 
@@ -30,6 +31,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
       <div className="pb-16">
         <Footer />
       </div>
+      <WhatsAppFloat digits={(settings?.whatsapp_number || "+8801833534123").replace(/\D/g, "")} />
       <BottomNav />
     </>
   );

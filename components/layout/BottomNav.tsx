@@ -17,7 +17,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="border-border/60 bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur">
+    <nav className="border-border bg-card fixed inset-x-0 bottom-0 z-40 border-t shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-4">
         {TABS.map((tab) => {
           const active =

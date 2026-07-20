@@ -191,7 +191,7 @@ export function ProductDetailClient({
         </Button>
 
         {product.description && (
-          <div className="prose prose-invert prose-sm border-t pt-5">
+          <div className="prose prose-sm border-t pt-5">
             <p className="text-muted-foreground whitespace-pre-line">
               {product.description}
             </p>
