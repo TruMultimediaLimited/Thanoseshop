@@ -135,6 +135,27 @@ export async function markOrderCompleted(orderId: string): Promise<ActionResult>
   return { ok: true };
 }
 
+export async function cancelOrder(orderId: string): Promise<ActionResult> {
+  const gate = await requireOrderManager();
+  if (!gate.ok) return gate;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("orders").update({ status: "cancelled" }).eq("id", orderId);
+  if (error) return { ok: false, message: error.message };
+
+  await supabase.from("audit_logs").insert({
+    actor_id: gate.admin.userId,
+    action: "order.cancelled",
+    entity_type: "order",
+    entity_id: orderId,
+  });
+
+  revalidatePath("/admin/orders");
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath("/account/orders");
+  return { ok: true };
+}
+
 export async function addOrderNote(
   orderId: string,
   _prevState: unknown,

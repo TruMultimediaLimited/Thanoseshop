@@ -4,10 +4,11 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getCartItemCount } from "@/lib/supabase/queries/cart";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
 
 export default async function StorefrontLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettings();
+  const [settings, cartCount] = await Promise.all([getSiteSettings(), getCartItemCount()]);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thanoseshop.vercel.app";
 
   return (
@@ -32,7 +33,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
         <Footer />
       </div>
       <WhatsAppFloat digits={(settings?.whatsapp_number || "+8801833534123").replace(/\D/g, "")} />
-      <BottomNav />
+      <BottomNav cartCount={cartCount} />
     </>
   );
 }

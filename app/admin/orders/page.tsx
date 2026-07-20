@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { StatusBadge } from "@/components/common/StatusBadge";
 import { EmptyState } from "@/components/common/EmptyState";
-import { formatPrice } from "@/components/catalog/ProductCard";
+import { AdminOrdersList, type AdminOrderRow } from "@/components/admin/orders/AdminOrdersList";
 import { getAdminOrders } from "@/lib/supabase/queries/admin/orders";
 import { ORDER_STATUS_LABEL, type OrderStatus } from "@/lib/types/commerce";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Orders | Admin" };
 
-const FILTERS: { label: string; value: OrderStatus | "all" }[] = [
+const STATUS_FILTERS: { label: string; value: OrderStatus | "all" }[] = [
   { label: "All", value: "all" },
   { label: ORDER_STATUS_LABEL.payment_review, value: "payment_review" },
   { label: ORDER_STATUS_LABEL.paid, value: "paid" },
@@ -20,70 +18,90 @@ const FILTERS: { label: string; value: OrderStatus | "all" }[] = [
   { label: ORDER_STATUS_LABEL.cancelled, value: "cancelled" },
 ];
 
+// Delivery differs per product type, so the list is split accordingly:
+// top-ups (need in-game delivery) vs gift cards/codes.
+const TYPE_FILTERS = [
+  { label: "All", value: "all" },
+  { label: "Game Top-Up", value: "topup" },
+  { label: "Gift Cards", value: "giftcard" },
+] as const;
+
+type OrderTypeFilter = (typeof TYPE_FILTERS)[number]["value"];
+
+function orderType(order: AdminOrderRow): Exclude<OrderTypeFilter, "all"> {
+  return order.items.some((item) => item.product?.product_type === "topup")
+    ? "topup"
+    : "giftcard";
+}
+
+function filterHref(status: string | undefined, type: OrderTypeFilter) {
+  const params = new URLSearchParams();
+  if (status) params.set("status", status);
+  if (type !== "all") params.set("type", type);
+  const qs = params.toString();
+  return qs ? `/admin/orders?${qs}` : "/admin/orders";
+}
+
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; type?: string }>;
 }) {
-  const { status } = await searchParams;
+  const { status, type } = await searchParams;
   const activeStatus = (status as OrderStatus | undefined) ?? undefined;
+  const activeType: OrderTypeFilter =
+    type === "topup" || type === "giftcard" ? type : "all";
 
-  const orders = await getAdminOrders(activeStatus);
+  const orders = (await getAdminOrders(activeStatus)) as unknown as AdminOrderRow[];
+  const visible =
+    activeType === "all" ? orders : orders.filter((o) => orderType(o) === activeType);
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Orders</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Order List</h1>
 
-      <div className="flex flex-wrap gap-2">
-        {FILTERS.map((filter) => (
-          <Link
-            key={filter.value}
-            href={filter.value === "all" ? "/admin/orders" : `/admin/orders?status=${filter.value}`}
-            className={cn(
-              "rounded-full border px-3 py-1 text-sm",
-              (filter.value === "all" && !activeStatus) || filter.value === activeStatus
-                ? "bg-primary text-primary-foreground border-primary"
-                : "hover:bg-secondary",
-            )}
-          >
-            {filter.label}
-          </Link>
-        ))}
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap gap-2">
+          {TYPE_FILTERS.map((filter) => (
+            <Link
+              key={filter.value}
+              href={filterHref(activeStatus, filter.value)}
+              className={cn(
+                "rounded-full border px-3 py-1 text-sm font-medium",
+                filter.value === activeType
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "hover:bg-secondary",
+              )}
+            >
+              {filter.label}
+            </Link>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {STATUS_FILTERS.map((filter) => (
+            <Link
+              key={filter.value}
+              href={filterHref(
+                filter.value === "all" ? undefined : filter.value,
+                activeType,
+              )}
+              className={cn(
+                "rounded-full border px-3 py-1 text-xs",
+                (filter.value === "all" && !activeStatus) || filter.value === activeStatus
+                  ? "bg-secondary border-primary/50 font-medium"
+                  : "hover:bg-secondary",
+              )}
+            >
+              {filter.label}
+            </Link>
+          ))}
+        </div>
       </div>
 
-      {orders.length === 0 ? (
+      {visible.length === 0 ? (
         <EmptyState message="No orders found." />
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Placed</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.id} className="cursor-pointer">
-                <TableCell>
-                  <Link href={`/admin/orders/${order.id}`} className="font-medium hover:underline">
-                    {order.order_number}
-                  </Link>
-                </TableCell>
-                <TableCell>{order.customer?.full_name ?? "—"}</TableCell>
-                <TableCell>{formatPrice(order.total)}</TableCell>
-                <TableCell>
-                  <StatusBadge status={order.status} />
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {new Date(order.created_at).toLocaleString()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <AdminOrdersList orders={visible} />
       )}
     </div>
   );

@@ -43,10 +43,13 @@ export function ProductDetailClient({
     ? selectedVariant?.compare_at_price
     : product.compare_at_price;
   const hasDiscount = price != null && compareAt != null && compareAt > price;
+  // PUBG account IDs are numeric and always start with 5.
+  const pubgIdInvalid =
+    needsPubgFields && playerId.trim().length > 0 && !/^5\d+$/.test(playerId.trim());
   const canAddToCart =
     (!product.has_variants || Boolean(variantId)) &&
     (!product.requires_player_id || playerId.trim().length > 0) &&
-    (!needsPubgFields || playerName.trim().length > 0);
+    (!needsPubgFields || (playerName.trim().length > 0 && !pubgIdInvalid));
 
   function handleAddToCart() {
     startTransition(async () => {
@@ -147,6 +150,11 @@ export function ProductDetailClient({
               inputMode={needsPubgFields ? "numeric" : undefined}
               placeholder={needsPubgFields ? "e.g. 5123456789" : "Enter your in-game Player ID"}
             />
+            {pubgIdInvalid && (
+              <p className="text-destructive mt-1.5 text-xs">
+                PUBG ID number must be digits starting with 5.
+              </p>
+            )}
             {product.delivery_instructions && (
               <p className="text-muted-foreground mt-1.5 text-xs">
                 {product.delivery_instructions}

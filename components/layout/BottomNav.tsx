@@ -13,7 +13,7 @@ const TABS = [
   { href: "/account", label: "Profile", icon: User },
 ];
 
-export function BottomNav() {
+export function BottomNav({ cartCount = 0 }: { cartCount?: number }) {
   const pathname = usePathname();
 
   return (
@@ -31,7 +31,14 @@ export function BottomNav() {
                 active ? "text-primary" : "text-white/60 hover:text-white",
               )}
             >
-              <tab.icon className="size-5" />
+              <span className="relative">
+                <tab.icon className="size-5" />
+                {tab.href === "/cart" && cartCount > 0 && (
+                  <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold">
+                    {cartCount > 9 ? "9+" : cartCount}
+                  </span>
+                )}
+              </span>
               {tab.label}
             </Link>
           );

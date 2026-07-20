@@ -2,6 +2,19 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Cart badge, stricter ID rules, expandable admin Order List
+- Bottom-nav Cart tab shows a count badge; every cart mutation
+  revalidates the layout so it updates immediately after Add to Cart.
+- PUBG ID Number must be digits starting with 5 (blocked with an inline
+  error otherwise).
+- bKash transaction IDs must be 10 characters starting with D/E/F/G
+  (client + server); Nagad stays 8 alphanumeric. Hint text under the
+  field shows the expected format.
+- Admin Order List rebuilt: type tabs (All / Game Top-Up / Gift Cards —
+  delivery differs per type), and each order click-expands inline to
+  items, player ID, payment + trx ID, phone, with Done / Cancel buttons
+  right there (new `cancelOrder` action) plus a Full-details link.
+
 ## PUBG player fields + gift-card WhatsApp rule
 - PUBG products now require both the in-game ID Name and ID Number
   (stored together in the existing player_id_note as

@@ -58,8 +58,9 @@ homepage/ payments/ settings/ announcements/ static-pages/`, plus
 dropdown (Available ↔ Out of Stock) / Previous Price / Current Price),
 `products/ProductsTable` (client table with bulk
 select/publish/archive/duplicate + CSV export), `GalleryEditor` (multi-image editor for
-`products.gallery`), and `orders/OrderTimeline` (status timeline +
-internal notes with add-note form).
+`products.gallery`), `orders/OrderTimeline` (status timeline +
+internal notes with add-note form), and `orders/AdminOrdersList`
+(client accordion order list with inline Done/Cancel actions).
 
 ## Reuse rules
 

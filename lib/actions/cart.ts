@@ -88,6 +88,7 @@ export async function addToCart(input: {
   }
 
   revalidatePath("/cart");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -106,6 +107,7 @@ export async function updateCartItemQuantity(
   if (error) return { ok: false, message: error.message };
 
   revalidatePath("/cart");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -116,6 +118,7 @@ export async function removeCartItem(cartItemId: string): Promise<ActionResult> 
   if (error) return { ok: false, message: error.message };
 
   revalidatePath("/cart");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -138,5 +141,6 @@ export async function clearCart(): Promise<ActionResult> {
   }
 
   revalidatePath("/cart");
+  revalidatePath("/", "layout");
   return { ok: true };
 }

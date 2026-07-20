@@ -35,6 +35,35 @@ export async function getCurrentUserCartItems() {
   return (data ?? []) as unknown as CartItemWithProduct[];
 }
 
+/**
+ * Line-item count for the bottom-nav badge. Uses the local session (no
+ * auth round trip) since a stale badge is harmless — the layout revalidates
+ * on every cart mutation anyway.
+ */
+export async function getCartItemCount() {
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.user) return 0;
+
+  const { data: cart } = await supabase
+    .from("carts")
+    .select("id")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+
+  if (!cart) return 0;
+
+  const { count } = await supabase
+    .from("cart_items")
+    .select("id", { count: "exact", head: true })
+    .eq("cart_id", cart.id);
+
+  return count ?? 0;
+}
+
 export function computeCartTotal(items: CartItemWithProduct[]) {
   return items.reduce((sum, item) => {
     const price = item.variant?.price ?? item.product.base_price ?? 0;

@@ -6,7 +6,7 @@ import type { OrderStatus } from "@/lib/types/commerce";
 
 const ADMIN_ORDER_SELECT = `
   *,
-  items:order_items ( * ),
+  items:order_items ( *, product:products ( product_type ) ),
   payment_method:payment_methods ( id, name, type ),
   payment_submission:payment_submissions ( * ),
   customer:profiles!orders_user_id_fkey ( id, full_name, phone ),

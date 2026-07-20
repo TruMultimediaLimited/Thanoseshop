@@ -9,30 +9,40 @@ export const checkoutSchema = z.object({
   couponCode: z.string().trim().optional().or(z.literal("")),
 });
 
-// Real bKash/Nagad transaction IDs are alphanumeric, so we validate exact
-// length rather than digits-only.
-export const TRX_ID_LENGTHS: Partial<Record<PaymentMethodType, number>> = {
-  bkash: 10,
-  nagad: 8,
+// Real transaction IDs are alphanumeric: bKash is 10 characters and always
+// starts with D, E, F, or G; Nagad is 8 characters.
+const TRX_ID_RULES: Partial<
+  Record<PaymentMethodType, { length: number; pattern: RegExp; error: string }>
+> = {
+  bkash: {
+    length: 10,
+    pattern: /^[DEFG][A-Z0-9]{9}$/i,
+    error: "bKash transaction ID is 10 characters and starts with D, E, F, or G.",
+  },
+  nagad: {
+    length: 8,
+    pattern: /^[A-Z0-9]{8}$/i,
+    error: "Nagad transaction ID is 8 characters.",
+  },
 };
 
-const METHOD_LABELS: Partial<Record<PaymentMethodType, string>> = {
-  bkash: "bKash",
-  nagad: "Nagad",
+export const TRX_ID_LENGTHS: Partial<Record<PaymentMethodType, number>> = {
+  bkash: TRX_ID_RULES.bkash!.length,
+  nagad: TRX_ID_RULES.nagad!.length,
+};
+
+export const TRX_ID_HINTS: Partial<Record<PaymentMethodType, string>> = {
+  bkash: "10 characters, starts with D, E, F, or G (e.g. D7A2B9C1X4).",
+  nagad: "8 characters (e.g. 74XK2M9P).",
 };
 
 export function getTransactionIdError(
   type: PaymentMethodType | undefined,
   value: string,
 ): string | null {
-  const trimmed = value.trim();
-  const expected = type ? TRX_ID_LENGTHS[type] : undefined;
-  if (expected == null) return null;
-
-  if (trimmed.length !== expected || !/^[A-Za-z0-9]+$/.test(trimmed)) {
-    return `Enter the ${expected}-character ${METHOD_LABELS[type!] ?? ""} transaction ID.`.replace("  ", " ");
-  }
-  return null;
+  const rule = type ? TRX_ID_RULES[type] : undefined;
+  if (!rule) return null;
+  return rule.pattern.test(value.trim()) ? null : rule.error;
 }
 
 // z.coerce.number() accepts an unvalidated input (e.g. a string from a form

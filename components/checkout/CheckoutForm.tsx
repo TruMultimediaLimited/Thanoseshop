@@ -15,6 +15,7 @@ import { placeOrder } from "@/lib/actions/checkout";
 import {
   checkoutSchema,
   getTransactionIdError,
+  TRX_ID_HINTS,
   TRX_ID_LENGTHS,
   type CheckoutFormInput,
   type CheckoutInput,
@@ -124,9 +125,9 @@ export function CheckoutForm({
           maxLength={trxLength}
           placeholder={trxLength ? "•".repeat(trxLength) : "e.g. 8N7K2L9P"}
         />
-        {trxLength && !errors.transactionId && (
+        {selectedMethod && TRX_ID_HINTS[selectedMethod.type] && !errors.transactionId && (
           <p className="text-muted-foreground mt-1 text-xs">
-            {selectedMethod?.name} transaction ID is {trxLength} characters.
+            {selectedMethod.name} transaction ID: {TRX_ID_HINTS[selectedMethod.type]}
           </p>
         )}
         {errors.transactionId && (
