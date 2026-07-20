@@ -11,7 +11,7 @@ export async function Header() {
   // gray tagline vanish on light surfaces — they need a dark field.
   return (
     <header className="border-b border-white/10 bg-[#161a28]/90 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
         <Link href="/" aria-label={siteName} className="flex items-center">
           <Image
             src={settings?.logo_url ?? "/logo.png"}

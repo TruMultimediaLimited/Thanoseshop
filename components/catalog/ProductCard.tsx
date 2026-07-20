@@ -102,15 +102,10 @@ export function ProductCard({
           )}
         </div>
 
-        <div className="flex flex-col gap-1 p-3">
-          {product.game?.name && (
-            <p className="text-muted-foreground truncate text-xs">
-              {product.game.name}
-            </p>
-          )}
-          <p className="text-sm font-semibold">{product.name}</p>
+        <div className="flex flex-col gap-0.5 p-2">
+          <p className="text-xs leading-tight font-semibold">{product.name}</p>
           {price && (
-            <p className="mt-1 text-sm font-semibold">
+            <p className="text-xs font-semibold">
               {price.label && (
                 <span className="text-muted-foreground mr-1 font-normal">
                   {price.label}
@@ -118,7 +113,7 @@ export function ProductCard({
               )}
               {formatPrice(price.amount)}
               {price.compareAt != null && (
-                <span className="text-muted-foreground ml-1.5 font-normal line-through">
+                <span className="text-muted-foreground ml-1 font-normal line-through">
                   {formatPrice(price.compareAt)}
                 </span>
               )}

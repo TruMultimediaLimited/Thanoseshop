@@ -23,7 +23,7 @@ export default async function Home() {
         {games.length === 0 ? (
           <EmptyState message="No games to show yet." />
         ) : (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 lg:grid-cols-6">
             {games.map((game) => (
               <GameCard key={game.id} game={game} />
             ))}
