@@ -53,7 +53,7 @@ export function ProductCard({
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       <Card className="overflow-hidden gap-0 py-0 transition-colors group-hover:border-primary/50">
-        <div className="bg-muted relative aspect-square w-full overflow-hidden">
+        <div className="bg-muted relative aspect-video w-full overflow-hidden">
           {product.thumbnail_url ? (
             <Image
               src={product.thumbnail_url}
@@ -108,7 +108,7 @@ export function ProductCard({
               {product.game.name}
             </p>
           )}
-          <p className="line-clamp-2 text-sm font-semibold">{product.name}</p>
+          <p className="text-sm font-semibold">{product.name}</p>
           {price && (
             <p className="mt-1 text-sm font-semibold">
               {price.label && (

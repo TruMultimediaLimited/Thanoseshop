@@ -11,13 +11,13 @@ export function GameCard({ game }: { game: Game }) {
   return (
     <Link href={`/games/${game.slug}`} className="group block">
       <Card className="overflow-hidden gap-0 py-0 transition-colors group-hover:border-primary/50">
-        <div className="bg-muted relative aspect-3/4 w-full overflow-hidden">
+        <div className="bg-muted relative aspect-video w-full overflow-hidden">
           {image ? (
             <Image
               src={image}
               alt={game.name}
               fill
-              sizes="(min-width: 1024px) 12vw, (min-width: 640px) 20vw, 33vw"
+              sizes="(min-width: 1024px) 25vw, 50vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
@@ -25,12 +25,9 @@ export function GameCard({ game }: { game: Game }) {
               <Gamepad2 className="size-8" />
             </div>
           )}
-          <span className="bg-primary text-primary-foreground absolute top-2 right-2 flex size-7 items-center justify-center rounded-full shadow-sm">
-            <Gamepad2 className="size-3.5" />
-          </span>
         </div>
-        <div className="p-2.5">
-          <p className="line-clamp-1 text-sm font-semibold">{game.name}</p>
+        <div className="px-2.5 py-2">
+          <p className="text-center text-sm font-semibold">{game.name}</p>
         </div>
       </Card>
     </Link>

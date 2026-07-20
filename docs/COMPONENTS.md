@@ -11,11 +11,9 @@ remove**), textarea, navigation-menu.
 ## `components/layout/`
 
 - `AnnouncementBar` — topmost active announcement above the header (server)
-- `Header` — 3-element bar: search / centered logo / WhatsApp (server;
-  fetches site settings only)
+- `Header` — centered logo in a black pill (server; site settings only)
 - `BottomNav` — fixed bottom tab bar (Home/FAQ/Cart/Profile), all viewports
 - `WhatsAppFloat` — floating WhatsApp action button above the bottom bar
-- `SearchButton` — boxed trigger + full-width drop-down search form (client)
 - `Footer` — link columns, social icons, dynamic payment-method badges
 
 ## `components/home/`

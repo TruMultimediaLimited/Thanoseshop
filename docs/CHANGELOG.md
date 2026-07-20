@@ -2,6 +2,16 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Polish: gray background, logo-only header, flat cards
+- Background deepened from near-white to light gray (#E9EAEC) — stark
+  white also strained the owner's eyes; cards stay white on top.
+- Header now holds only the centered logo, sitting in a small black pill
+  (the flame emblem was drawn for a black field); search button removed
+  (SearchButton deleted — search remains on the products page).
+- Game and product cards flattened to landscape (aspect-video) with
+  untruncated names; grids retuned to 2-col mobile / 4-col desktop.
+- WhatsApp float raised (bottom-24), shrunk to 44px, 90% opacity.
+
 ## Light theme + floating WhatsApp + simplified admin nav
 - Whole site (storefront + admin) switched to a soft light theme: #F6F6F7
   background, white cards, soft-black text, orange primary. `dark` class

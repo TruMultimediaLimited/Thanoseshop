@@ -8,7 +8,7 @@
 
   /* Light mode — the active theme: soft near-white surfaces, soft-black
      text (never pure black-on-white), orange primary, gold accent. */
-  --background: #f6f6f7;
+  --background: #e9eaec;
   --foreground: #1c1c1e;
 
   --card: #ffffff;
@@ -20,11 +20,11 @@
   --primary: #e85d00;
   --primary-foreground: #ffffff;
 
-  --secondary: #efeff1;
+  --secondary: #dfe0e3;
   --secondary-foreground: #2a2a2c;
 
-  --muted: #efeff1;
-  --muted-foreground: #6b7280;
+  --muted: #dfe0e3;
+  --muted-foreground: #63666d;
 
   --accent: #d69e00;
   --accent-foreground: #332800;
