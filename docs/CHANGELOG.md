@@ -2,6 +2,16 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Polish 3: deep navy background (owner's reference pick)
+- Page background switched to deep navy #10141F (from the rmtgameshop
+  reference the owner chose) with near-white text; cards and menus stay
+  white with dark text — the reference's label-panel look.
+- Header and bottom nav are navy glass bars (bg-[#161a28]/90 + blur,
+  white/10 border); footer sits directly on the navy with a subtle top
+  border; footer logo removed (site-name text instead).
+- Border/input tokens moved to mid-gray at partial opacity so they stay
+  visible on both the navy page and white cards.
+
 ## Polish 2: new wordmark logo, translucent bars
 - New THANOS ESHOP wordmark logo (red + silver, white background made
   transparent, trimmed) replaces the old emblem in the header (now

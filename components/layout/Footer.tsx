@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -44,17 +43,11 @@ export async function Footer() {
   const whatsappDigits = settings?.whatsapp_number?.replace(/\D/g, "");
 
   return (
-    <footer className="border-border/60 bg-card/40 border-t">
+    <footer className="border-t border-white/10">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <Image
-              src={settings?.logo_url ?? "/logo.png"}
-              alt={siteName}
-              width={124}
-              height={44}
-              className="h-11 w-auto object-contain"
-            />
+            <p className="text-lg font-semibold tracking-tight">{siteName}</p>
             <p className="text-muted-foreground mt-2 max-w-xs text-sm">
               {settings?.footer_text ??
                 "Premium game top-ups, gift cards, and digital products for Bangladeshi gamers."}

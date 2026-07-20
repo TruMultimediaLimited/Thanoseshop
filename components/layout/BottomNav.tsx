@@ -17,7 +17,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="border-border/60 bg-card/75 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur-md">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#161a28]/90 backdrop-blur-md">
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-4">
         {TABS.map((tab) => {
           const active =
@@ -28,7 +28,7 @@ export function BottomNav() {
               href={tab.href}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors",
-                active ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                active ? "text-primary" : "text-white/60 hover:text-white",
               )}
             >
               <tab.icon className="size-5" />

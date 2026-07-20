@@ -8,25 +8,29 @@
 
   /* Light mode — the active theme: soft near-white surfaces, soft-black
      text (never pure black-on-white), orange primary, gold accent. */
-  --background: #e9eaec;
-  --foreground: #1c1c1e;
+  /* Deep navy page (rmtgameshop-style reference the owner picked) with
+     white cards on top — the label-panel look from the reference. Border
+     and input are mid-gray at partial opacity so they stay visible on both
+     the navy page and the white cards. */
+  --background: #10141f;
+  --foreground: #f2f3f5;
 
   --card: #ffffff;
-  --card-foreground: #1c1c1e;
+  --card-foreground: #16181d;
 
   --popover: #ffffff;
-  --popover-foreground: #1c1c1e;
+  --popover-foreground: #16181d;
 
-  --primary: #e85d00;
+  --primary: #ff6a00;
   --primary-foreground: #ffffff;
 
-  --secondary: #dfe0e3;
-  --secondary-foreground: #2a2a2c;
+  --secondary: #eef0f3;
+  --secondary-foreground: #24262b;
 
-  --muted: #dfe0e3;
-  --muted-foreground: #63666d;
+  --muted: #171c2a;
+  --muted-foreground: #7e8695;
 
-  --accent: #d69e00;
+  --accent: #ffc107;
   --accent-foreground: #332800;
 
   --success: #16a34a;
@@ -35,9 +39,9 @@
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --border: oklch(0 0 0 / 8%);
-  --input: oklch(0 0 0 / 12%);
-  --ring: #e85d00;
+  --border: oklch(0.65 0.015 260 / 32%);
+  --input: oklch(0.65 0.015 260 / 55%);
+  --ring: #ff6a00;
 
   --chart-1: #e85d00;
   --chart-2: #d69e00;

@@ -1,29 +1,31 @@
 # UI Guidelines — Thanos E-Shop Design System
 
-The visual language pairs the flame-orange brand with a soft light theme
-(owner decision: pure black hurt their eyes). Inspiration only from
-Codashop/SEAGM-class sites — never copied.
+The visual language: deep navy page (owner picked it from their reference —
+softer than pure black, dark enough for the red/silver wordmark) with white
+cards on top, flame-orange primary. Inspiration only from Codashop/
+SEAGM-class sites — never copied.
 
-## Color tokens (light = active theme; `app/globals.css`)
+## Color tokens (`:root` is the active theme; `app/globals.css`)
 
 | Token | Value | Use |
 |---|---|---|
-| `--background` | `#E9EAEC` | Light gray page background |
-| `--foreground` | `#1C1C1E` | Soft black text (never pure #000) |
-| `--card` | `#FFFFFF` | Cards, header, bottom bar |
-| `--secondary` / `--muted` | `#DFE0E3` | Surfaces, hover states |
-| `--primary` | `#E85D00` | Primary actions, links, focus ring |
-| `--accent` | `#D69E00` | Gold — badges (Best Seller), stars only |
-| `--success` | `#16A34A` | Success states |
-| `--destructive` | `#DC2626` | Errors, destructive actions |
-| `--border` | `black / 8%` | Subtle borders — do not overuse |
-| `--muted-foreground` | `#6B7280` | Muted text |
+| `--background` | `#10141F` | Deep navy page background |
+| `--foreground` | `#F2F3F5` | Near-white text on the navy page |
+| `--card` / `--popover` | `#FFFFFF` (dark text) | White cards/menus — the reference's label-panel look |
+| `--secondary` | `#EEF0F3` | On-card surfaces, hovers inside white contexts |
+| `--muted` | `#171C2A` | Page-level muted surfaces (image placeholders) |
+| `--muted-foreground` | `#7E8695` | Muted text — tuned to read on BOTH navy and white |
+| `--primary` | `#FF6A00` | Primary actions, links, focus ring |
+| `--accent` | `#FFC107` | Gold — badges (Best Seller), stars only |
+| `--success` / `--destructive` | `#16A34A` / `#DC2626` | States |
+| `--border` / `--input` | mid-gray @ 32% / 55% | Visible on both navy and white |
 
-A `.dark` palette remains defined but the `dark` class is no longer set on
-`<html>` — the site ships light-only.
+Bars: header + bottom nav are navy glass (`bg-[#161a28]/90` + blur +
+`border-white/10`); bottom-nav inactive ink is `text-white/60` (hardcoded —
+tokens describe on-card ink).
 
 Rule: **gold (`accent`) is decorative** — badges/stars/highlights. Interactive
-hover states use `secondary` (#181818), never gold.
+hover states use `secondary`, never gold.
 
 ## Components
 
