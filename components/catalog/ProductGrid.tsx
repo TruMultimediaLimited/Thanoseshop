@@ -5,24 +5,18 @@ import type { ProductWithRelations } from "@/lib/types/catalog";
 export function ProductGrid({
   products,
   emptyMessage = "No products found.",
-  wishlistedIds,
 }: {
   products: ProductWithRelations[];
   emptyMessage?: string;
-  wishlistedIds?: Set<string>;
 }) {
   if (products.length === 0) {
     return <EmptyState message={emptyMessage} />;
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 lg:grid-cols-6">
       {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          isWishlisted={wishlistedIds?.has(product.id) ?? false}
-        />
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   );

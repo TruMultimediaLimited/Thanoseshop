@@ -19,17 +19,20 @@ remove**), textarea, navigation-menu.
 ## `components/home/`
 
 `HeroBanner` (carousel), `CategoryPills`, `SearchBarSection`, `GamesRow`,
-`ProductRailSection`, `FeaturedCategories`, `WhyChooseUs`, `Testimonials`,
+`FeaturedCategories`, `WhyChooseUs`, `Testimonials`,
 `FaqSection`, `Newsletter`, `SectionHeading`.
-Homepage sections are dispatched from `app/(storefront)/page.tsx` by
-`homepage_sections.section_type`.
+The homepage itself is a fixed two-section page (Popular Games + Gift
+Cards); these components remain for other routes/legacy use.
 
 ## `components/catalog/`
 
-`ProductCard` (badges, wishlist, price/from-price; exports `formatPrice`),
-`ProductGrid`, `GameCard` (poster style, banner_url→logo_url fallback),
-`CategoryCard`, `ProductDetailClient` (gallery + variant selector + add to
-cart), `VariantSelector`, `WishlistButton`, `ReviewForm`, `ReviewsList`.
+`ProductCard` (compact image+name tile, identical size to `GameCard` —
+no price/badges/wishlist on tiles; still exports `formatPrice`),
+`ProductGrid` (3/4/6-col compact grid), `GameCard` (aspect-video image +
+fixed h-9 clamp-2 name panel, banner_url→logo_url fallback),
+`CategoryCard`, `ProductDetailClient` (image-free purchase page: title +
+price + package selector + add to cart), `VariantSelector`,
+`WishlistButton`, `ReviewForm`, `ReviewsList`.
 
 ## `components/checkout/`
 

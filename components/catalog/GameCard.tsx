@@ -26,8 +26,10 @@ export function GameCard({ game }: { game: Game }) {
             </div>
           )}
         </div>
-        <div className="px-1.5 py-1">
-          <p className="text-center text-xs leading-tight font-semibold">{game.name}</p>
+        <div className="flex h-9 items-center justify-center px-1.5">
+          <p className="line-clamp-2 text-center text-[11px] leading-tight font-semibold">
+            {game.name}
+          </p>
         </div>
       </Card>
     </Link>

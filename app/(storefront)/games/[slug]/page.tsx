@@ -4,7 +4,6 @@ import { notFound, redirect } from "next/navigation";
 
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { getGameBySlug, getProducts } from "@/lib/supabase/queries/catalog";
-import { getWishlistedProductIds } from "@/lib/supabase/queries/wishlist";
 
 export async function generateMetadata({
   params,
@@ -29,10 +28,7 @@ export default async function GamePage({
   const game = await getGameBySlug(slug);
   if (!game) notFound();
 
-  const [{ products }, wishlistedIds] = await Promise.all([
-    getProducts({ gameSlug: slug, pageSize: 48 }),
-    getWishlistedProductIds(),
-  ]);
+  const { products } = await getProducts({ gameSlug: slug, pageSize: 48 });
 
   // One product means there is nothing to choose here — take the customer
   // straight to the package/purchase page instead of an intermediate list.
@@ -70,7 +66,6 @@ export default async function GamePage({
         <ProductGrid
           products={products}
           emptyMessage="No top-ups published for this game yet."
-          wishlistedIds={wishlistedIds}
         />
       </div>
     </div>

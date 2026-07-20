@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 
 export default async function WishlistPage() {
   const products = await getWishlistProducts();
-  const wishlistedIds = new Set(products.map((p) => p.id));
 
   return (
     <div className="flex flex-col gap-6">
@@ -21,7 +20,7 @@ export default async function WishlistPage() {
       {products.length === 0 ? (
         <EmptyState icon={<Heart className="size-8" />} message="Your wishlist is empty." />
       ) : (
-        <ProductGrid products={products} wishlistedIds={wishlistedIds} />
+        <ProductGrid products={products} />
       )}
     </div>
   );

@@ -2,6 +2,19 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Uniform compact tiles + image-free purchase page
+- Every homepage box is now the exact same size (the PUBG/Free Fire
+  size): fixed-height name panel with 2-line clamp, so long names
+  (Mobile Legends, Honkai Star Rail…) no longer stretch their cards.
+- Gift-card tiles match the game tiles — image + name only, in the same
+  3/4/6-column grid. Prices, discount badges, and wishlist hearts are
+  gone from tiles; price appears on the purchase page.
+- Product purchase page no longer renders images or a gallery — it opens
+  straight to title, price, package selector, and Add to Cart (wishlist
+  heart moved beside the title). Listing pages also dropped their
+  per-request wishlist query. Faster loads all around.
+- Deleted unused `ProductRailSection` leftover from the old homepage.
+
 ## Simple product form (owner's reference)
 - Admin product form stripped to the essentials: Name, Product Type
   (+ Game for top-ups), Thumbnail, package list, Requires Player ID,
