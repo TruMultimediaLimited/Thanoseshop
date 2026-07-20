@@ -10,10 +10,16 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { title: "Orders | Admin" };
 
 // Toggleable: tapping the active one clears it back to "all statuses".
-const STATUS_FILTERS: { label: string; value: OrderStatus }[] = [
+// "Pending" is a group — every order that is not yet completed/cancelled.
+const STATUS_FILTERS = [
+  { label: "Pending", value: "pending" },
   { label: ORDER_STATUS_LABEL.completed, value: "completed" },
   { label: ORDER_STATUS_LABEL.cancelled, value: "cancelled" },
-];
+] as const;
+
+type StatusFilter = (typeof STATUS_FILTERS)[number]["value"];
+
+const CLOSED: OrderStatus[] = ["completed", "cancelled", "refunded"];
 
 // Delivery differs per product type, so the list is split accordingly:
 // top-ups (need in-game delivery) vs gift cards/codes.
@@ -43,11 +49,21 @@ export default async function AdminOrdersPage({
   searchParams: Promise<{ status?: string; type?: string }>;
 }) {
   const { status, type } = await searchParams;
-  const activeStatus = (status as OrderStatus | undefined) ?? undefined;
+  const activeStatus =
+    status === "pending" || status === "completed" || status === "cancelled"
+      ? (status as StatusFilter)
+      : undefined;
   const activeType: OrderTypeFilter = type === "giftcard" ? "giftcard" : "topup";
 
-  const orders = (await getAdminOrders(activeStatus)) as unknown as AdminOrderRow[];
-  const visible = orders.filter((o) => orderType(o) === activeType);
+  const orders = (await getAdminOrders(
+    activeStatus === "completed" || activeStatus === "cancelled" ? activeStatus : undefined,
+  )) as unknown as AdminOrderRow[];
+
+  const visible = orders.filter(
+    (o) =>
+      orderType(o) === activeType &&
+      (activeStatus !== "pending" || !CLOSED.includes(o.status)),
+  );
 
   return (
     <div className="flex flex-col gap-6">
