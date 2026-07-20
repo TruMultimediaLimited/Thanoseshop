@@ -1,15 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, User } from "lucide-react";
 
 import { SearchButton } from "@/components/layout/SearchButton";
-import { UserMenu } from "@/components/layout/UserMenu";
-import { createClient } from "@/lib/supabase/server";
-import { getCategories } from "@/lib/supabase/queries/catalog";
 import { getSiteSettings } from "@/lib/supabase/queries/settings";
-
-const NAV_LINK_CLASS =
-  "text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors";
 
 const BOX_BTN =
   "border-border bg-card hover:border-primary hover:text-primary inline-flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors";
@@ -25,93 +18,36 @@ function WhatsAppIcon() {
 }
 
 export async function Header() {
-  const supabase = await createClient();
-  const [
-    settings,
-    categories,
-    {
-      data: { user },
-    },
-  ] = await Promise.all([getSiteSettings(), getCategories(), supabase.auth.getUser()]);
-
-  const profile = user
-    ? (
-        await supabase
-          .from("profiles")
-          .select("full_name, role")
-          .eq("id", user.id)
-          .single()
-      ).data
-    : null;
-
+  const settings = await getSiteSettings();
   const siteName = settings?.site_name ?? "Thanos E-Shop";
   const whatsappDigits = (settings?.whatsapp_number || DEFAULT_WHATSAPP).replace(/\D/g, "");
 
   return (
-    <header className="border-border/60 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
-      <div className="relative mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2">
-          <SearchButton className={BOX_BTN} />
-          <a
-            href={`https://wa.me/${whatsappDigits}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat on WhatsApp"
-            className={BOX_BTN}
-          >
-            <WhatsAppIcon />
-          </a>
-        </div>
+    <header className="border-border/60 bg-background/90 border-b backdrop-blur">
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <SearchButton className={BOX_BTN} />
 
         <Link href="/" aria-label={siteName} className="absolute left-1/2 -translate-x-1/2">
           <Image
             src={settings?.logo_url ?? "/logo.png"}
             alt={siteName}
-            width={70}
-            height={64}
-            className="h-16 w-auto object-contain"
+            width={62}
+            height={57}
+            className="h-14 w-auto object-contain"
             priority
           />
         </Link>
 
-        <div className="flex items-center gap-2">
-          <Link href="/cart" aria-label="Cart" className={BOX_BTN}>
-            <ShoppingCart className="size-4" />
-          </Link>
-          {user ? (
-            <UserMenu
-              fullName={profile?.full_name ?? null}
-              email={user.email ?? ""}
-              isAdmin={profile?.role === "admin"}
-              triggerClassName={BOX_BTN}
-            />
-          ) : (
-            <Link href="/login" aria-label="Log in" className={BOX_BTN}>
-              <User className="size-4" />
-            </Link>
-          )}
-        </div>
+        <a
+          href={`https://wa.me/${whatsappDigits}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+          className={BOX_BTN}
+        >
+          <WhatsAppIcon />
+        </a>
       </div>
-
-      <nav className="border-border/40 hidden h-10 items-center justify-center border-t md:flex">
-        <Link href="/products?type=topup" className={NAV_LINK_CLASS}>
-          Games
-        </Link>
-        <Link href="/gift-cards" className={NAV_LINK_CLASS}>
-          Gift Cards
-        </Link>
-        {categories
-          .filter((c) => !c.parent_id)
-          .slice(0, 4)
-          .map((category) => (
-            <Link key={category.id} href={`/categories/${category.slug}`} className={NAV_LINK_CLASS}>
-              {category.name}
-            </Link>
-          ))}
-        <Link href="/contact" className={NAV_LINK_CLASS}>
-          Contact
-        </Link>
-      </nav>
     </header>
   );
 }

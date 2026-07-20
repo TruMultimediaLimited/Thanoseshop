@@ -2,6 +2,16 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Storefront v2 — simple skin
+- Header slimmed to search / centered logo / WhatsApp (one settings query,
+  no auth/categories fetches); sticky together with the announcement bar.
+- New fixed BottomNav (Home / FAQ / Cart / Profile) on all viewports.
+- Homepage rewritten to a fixed two-section layout: Popular Games grid +
+  Gift Cards grid (2 queries, was ~10; hero/pills/testimonials/newsletter
+  sections dropped).
+- Removed framer-motion, FadeIn, UserMenu (profile now lives in the bottom
+  bar; account sidebar keeps Admin Panel + sign out).
+
 ## Module 5 — Bulk product actions
 - ProductsTable (shared by Products and Gift Cards admin pages): row
   checkboxes + select-all, bulk Publish/Unpublish/Archive, Duplicate for a

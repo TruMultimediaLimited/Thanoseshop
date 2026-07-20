@@ -36,17 +36,15 @@ hover states use `secondary` (#181818), never gold.
 
 ## Motion
 
-framer-motion, used sparingly (spec: do not over animate):
-- `FadeIn` (`components/common/FadeIn.tsx`) — 0.28s fade+rise, once, used on
-  homepage sections only.
-- Everything else: CSS transitions ≤300ms (colors, transform).
+CSS transitions only, ≤300ms (colors, transform). No animation library.
 
 ## Layout
 
 - Max content width `max-w-7xl`; page padding `px-4 sm:px-6 lg:px-8`.
 - 8px-friendly spacing: section gaps `gap-12`, card padding p-3/p-6.
-- Header: mobile = Search+WhatsApp | centered 64px logo | Cart+Profile
-  (4 equal boxed buttons). Desktop adds a nav-links row underneath.
+- Header (all viewports): Search box-button | centered logo | WhatsApp
+  box-button; sticky with the announcement bar. Primary navigation is the
+  fixed bottom tab bar (Home/FAQ/Cart/Profile).
 - Typography: Geist Sans; headings `font-semibold tracking-tight`; body
   `text-sm`/`text-base`; muted secondary text.
 

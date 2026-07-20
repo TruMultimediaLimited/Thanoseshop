@@ -11,10 +11,10 @@ remove**), textarea, navigation-menu.
 ## `components/layout/`
 
 - `AnnouncementBar` — topmost active announcement above the header (server)
-- `Header` — centered-logo 5-element bar + desktop nav row (server; fetches
-  settings/categories/user)
+- `Header` — 3-element bar: search / centered logo / WhatsApp (server;
+  fetches site settings only)
+- `BottomNav` — fixed bottom tab bar (Home/FAQ/Cart/Profile), all viewports
 - `SearchButton` — boxed trigger + full-width drop-down search form (client)
-- `UserMenu` — avatar dropdown: Profile/Orders/Wishlist/Admin/Logout (client)
 - `Footer` — link columns, social icons, dynamic payment-method badges
 
 ## `components/home/`
@@ -39,7 +39,7 @@ coupon), `CartItemRow`.
 
 ## `components/common/`
 
-`EmptyState`, `Pagination`, `StatusBadge`, `FadeIn` (framer-motion).
+`EmptyState`, `Pagination`, `StatusBadge`.
 
 ## `components/admin/`
 

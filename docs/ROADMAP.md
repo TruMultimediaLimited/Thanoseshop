@@ -39,11 +39,22 @@ Dashboard: six stat cards (adds 30-day revenue + customer count), 30-day
 revenue area chart + orders bar chart (recharts, theme chart tokens,
 single-series each), recent-orders table with status badges.
 
-## Module 5 — Bulk product actions ✅ (this module)
+## Module 5 — Bulk product actions ✅
 
 Products/Gift Cards admin tables gain row selection with bulk Publish /
 Unpublish / Archive, single-select Duplicate (copies product + variants as
 a draft with a -copy slug), and client-side CSV export (selected or all).
+
+## Storefront v2 — simple skin ✅ (latest)
+
+Owner feedback: the site felt bulky/cluttered; they wanted simple. The
+customer-facing skin was replaced wholesale (backend/checkout/admin
+untouched): 3-element fixed header (search / centered logo / WhatsApp),
+no hero banner, a fixed homepage of exactly two sections (Popular Games,
+Gift Cards), and a fixed bottom tab bar (Home / FAQ / Cart / Profile) on
+all screens. framer-motion removed. The homepage no longer reads
+homepage_sections — it is fixed-structure by explicit owner decision; the
+Homepage Manager and Banner admin sections remain for future use.
 
 ## Deferred (explicit owner decisions)
 
