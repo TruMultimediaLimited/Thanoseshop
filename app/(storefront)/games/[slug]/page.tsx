@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { getGameBySlug, getProducts } from "@/lib/supabase/queries/catalog";
@@ -33,6 +33,12 @@ export default async function GamePage({
     getProducts({ gameSlug: slug, pageSize: 48 }),
     getWishlistedProductIds(),
   ]);
+
+  // One product means there is nothing to choose here — take the customer
+  // straight to the package/purchase page instead of an intermediate list.
+  if (products.length === 1) {
+    redirect(`/products/${products[0].slug}`);
+  }
 
   return (
     <div className="flex flex-col">

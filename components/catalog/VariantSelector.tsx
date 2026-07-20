@@ -18,7 +18,7 @@ export function VariantSelector({
   if (published.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
       {published.map((variant) => {
         const outOfStock =
           variant.stock_quantity !== null && variant.stock_quantity <= 0;
@@ -31,14 +31,19 @@ export function VariantSelector({
             disabled={outOfStock}
             onClick={() => onSelect(variant.id)}
             className={cn(
-              "rounded-lg border px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+              "rounded-xl border-2 px-3 py-3.5 text-center transition-colors disabled:cursor-not-allowed disabled:opacity-40",
               selected
                 ? "border-primary bg-primary/10"
-                : "border-border hover:border-primary/50",
+                : "border-border hover:border-primary/60",
             )}
           >
-            <p className="font-medium">{variant.name}</p>
-            <p className="text-muted-foreground text-xs">
+            <p className="text-base font-semibold">{variant.name}</p>
+            <p
+              className={cn(
+                "mt-0.5 text-sm font-semibold",
+                outOfStock ? "text-muted-foreground" : "text-primary",
+              )}
+            >
               {outOfStock ? "Out of stock" : formatPrice(variant.price)}
             </p>
           </button>
