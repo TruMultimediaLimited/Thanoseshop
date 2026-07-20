@@ -2,6 +2,14 @@
 
 Newest first. One entry per meaningful push to `claude/website-design-dmss7e`.
 
+## Polish 2: new wordmark logo, translucent bars
+- New THANOS ESHOP wordmark logo (red + silver, white background made
+  transparent, trimmed) replaces the old emblem in the header (now
+  left-aligned), footer, and favicon.
+- Header and bottom nav are now translucent glass bars (bg-card/70-75 +
+  backdrop blur, soft border) so the page feels seamless while the bars
+  stay distinguishable.
+
 ## Polish: gray background, logo-only header, flat cards
 - Background deepened from near-white to light gray (#E9EAEC) — stark
   white also strained the owner's eyes; cards stay white on top.
